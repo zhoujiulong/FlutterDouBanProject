@@ -1,0 +1,1 @@
+export 'package:movie_sample/constants/url_constant.dart';
