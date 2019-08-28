@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SpUtil.init();
+    LogUtil.init(isDebug: true, tag: "zhoujiulong");
     return BlocProvider<ApplicationBloc>(
       bloc: ApplicationBloc(),
       child: MaterialApp(

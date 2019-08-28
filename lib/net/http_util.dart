@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import 'base_response.dart';
-import 'request_listener.dart';
+import 'package:movie_sample/index/index.dart';
 
 ///网络请求工具类，单例处理
 class HttpUtil {
@@ -67,6 +66,7 @@ class HttpUtil {
           response = await _dio.post<Map<String, dynamic>>(url);
         }
       }
+      LogUtil.d(response.data);
       if (response.statusCode != 200) {
         requestListener.onError(BaseResponse(response.statusCode, "请求失败", Map()));
       } else {

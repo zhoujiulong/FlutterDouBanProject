@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -113,8 +114,9 @@ class HotPlayPage extends StatelessWidget {
                 height: Density.instance.dp(230),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(Density.instance.dp(8)),
-                  child: Image.network(
-                    imgSrc,
+                  child: CachedNetworkImage(
+                    imageUrl: imgSrc,
+                    placeholder: (context, url) => ImgPlaceHolder(),
                     fit: BoxFit.fill,
                   ),
                 ),
