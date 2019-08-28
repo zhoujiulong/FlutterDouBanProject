@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_sample/index/widget_index.dart';
+import 'package:movie_sample/index/index.dart';
 
 class FindMoviePage extends StatelessWidget {
   @override

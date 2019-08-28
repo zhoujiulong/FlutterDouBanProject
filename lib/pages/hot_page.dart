@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/bloc_index.dart';
 import 'package:movie_sample/index/page_index.dart';
-import 'package:movie_sample/index/util_index.dart';
-import 'package:movie_sample/index/widget_index.dart';
+import 'package:movie_sample/index/index.dart';
 
 class HotPage extends StatefulWidget {
   int currentPage = 0;

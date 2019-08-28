@@ -1,9 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:movie_sample/index/bloc_index.dart';
-import 'package:movie_sample/index/constant_index.dart';
-import 'package:movie_sample/index/model_index.dart';
-import 'package:movie_sample/index/net_index.dart';
-import 'package:movie_sample/index/widget_index.dart';
+import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
 
 ///正在热播
@@ -51,7 +47,8 @@ class HotPlayBloc extends BlocBase {
 
   @override
   void dispose() {
-    _loadingSubject.close();
-    _hotPlayDataSubject.close();
+    //因为是一级页面，页面切换也会调用该方法，所以不进行关闭
+//    _loadingSubject.close();
+//    _hotPlayDataSubject.close();
   }
 }

@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:movie_sample/index/util_index.dart';
-
-import 'package:movie_sample/index/page_index.dart';
+import 'package:movie_sample/index/index.dart';
 
 class SplashPage extends StatefulWidget {
   @override

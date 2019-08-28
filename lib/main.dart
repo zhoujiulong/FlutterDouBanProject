@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_sample/index/bloc_index.dart';
-import 'package:movie_sample/index/page_index.dart';
-import 'package:movie_sample/index/util_index.dart';
+import 'package:movie_sample/index/index.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
       bloc: ApplicationBloc(),
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.white),
+        theme: ThemeData(primaryColor: Colors.white, scaffoldBackgroundColor: Colors.white),
         home: SplashPage(),
       ),
     );

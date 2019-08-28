@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_sample/index/bloc_index.dart';
-import 'package:movie_sample/index/model_index.dart';
-import 'package:movie_sample/index/res_index.dart';
-import 'package:movie_sample/index/util_index.dart';
-import 'package:movie_sample/index/widget_index.dart';
+import 'package:movie_sample/index/index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 ///正在热播
@@ -41,20 +37,22 @@ class HotPlayPage extends StatelessWidget {
                     constraints: BoxConstraints.expand(),
                     child: Container(
                       color: Colors.white,
-                      child: SmartRefresher(
-                        controller: _refreshController,
-                        onRefresh: _refresh,
-                        header: ClassicHeader(),
-                        child: ListView.builder(
-                          itemCount: snapshot.data.subjects.length + 1,
-                          padding: EdgeInsets.all(0),
-                          itemBuilder: (context, index) {
-                            return index < snapshot.data.subjects.length
-                                ? _buildItem(snapshot.data.subjects[index])
-                                : _buildFooter();
-                          },
-                        ),
-                      ),
+                      child: ScrollConfiguration(
+                          behavior: MyScrollBehavior(),
+                          child: SmartRefresher(
+                            controller: _refreshController,
+                            onRefresh: _refresh,
+                            header: ClassicHeader(),
+                            child: ListView.builder(
+                              itemCount: snapshot.data.subjects.length + 1,
+                              padding: EdgeInsets.all(0),
+                              itemBuilder: (context, index) {
+                                return index < snapshot.data.subjects.length
+                                    ? _buildItem(snapshot.data.subjects[index])
+                                    : _buildFooter();
+                              },
+                            ),
+                          )),
                     ),
                   );
                 }),

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_sample/index/bloc_index.dart';
-import 'package:movie_sample/index/page_index.dart';
-import 'package:movie_sample/index/res_index.dart';
-import 'package:movie_sample/index/util_index.dart';
-import 'package:movie_sample/index/widget_index.dart';
+import 'package:movie_sample/index/index.dart';
 
 class MainPage extends StatelessWidget {
   //底部导航栏Items
