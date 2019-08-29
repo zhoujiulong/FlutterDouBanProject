@@ -1,1 +1,1 @@
-export 'package:movie_sample/models/hot_play_model.dart';
+export 'package:movie_sample/models/music_model.dart';

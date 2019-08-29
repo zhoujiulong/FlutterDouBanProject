@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:movie_sample/index/index.dart';
+import 'package:rxdart/rxdart.dart';
 
 abstract class BlocBase {
+  BehaviorSubject<LoadingState> _loadingSubject = BehaviorSubject<LoadingState>();
+
+  Sink<LoadingState> get _loadingSink => _loadingSubject.sink;
+
+  Stream<LoadingState> get loadingStream => _loadingSubject.stream;
+
+  void setLoadingState(LoadingState state) {
+    _loadingSink.add(state);
+  }
+
+  void disposeBase() {
+    _loadingSubject.close();
+    dispose();
+  }
+
   void dispose();
 }
 
@@ -33,7 +50,7 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
 class _BlocProviderState<T> extends State<BlocProvider<BlocBase>> {
   @override
   void dispose() {
-    if (widget.userDispose) widget.bloc.dispose();
+    if (widget.userDispose) widget.bloc.disposeBase();
     super.dispose();
   }
 

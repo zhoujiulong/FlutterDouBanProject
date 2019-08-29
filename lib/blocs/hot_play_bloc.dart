@@ -4,19 +4,15 @@ import 'package:rxdart/rxdart.dart';
 
 ///正在热播
 class HotPlayBloc extends BlocBase {
-  BehaviorSubject<LoadingState> _loadingSubject = BehaviorSubject<LoadingState>();
 
-  Sink<LoadingState> get _loadingSink => _loadingSubject.sink;
 
-  Stream<LoadingState> get loadingStream => _loadingSubject.stream;
+  BehaviorSubject<MusicModel> _hotPlayDataSubject = BehaviorSubject<MusicModel>();
 
-  BehaviorSubject<HotPlayModel> _hotPlayDataSubject = BehaviorSubject<HotPlayModel>();
+  Sink<MusicModel> get _hotPlayDataSink => _hotPlayDataSubject.sink;
 
-  Sink<HotPlayModel> get _hotPlayDataSink => _hotPlayDataSubject.sink;
+  Stream<MusicModel> get hotPlayDataStream => _hotPlayDataSubject.stream;
 
-  Stream<HotPlayModel> get hotPlayDataStream => _hotPlayDataSubject.stream;
-
-  HotPlayModel hotPlayModel;
+  MusicModel hotPlayModel;
 
   void getHotPlayData() {
     FormData params = FormData();
@@ -27,28 +23,26 @@ class HotPlayBloc extends BlocBase {
         params: params, listener: RequestListener(success: _getHotPlayDataSuccess, error: _getHotPlayDataError));
   }
 
-  void setLoadingState(LoadingState state) {
-    _loadingSink.add(state);
-  }
-
   _getHotPlayDataSuccess(BaseResponse response) {
-    hotPlayModel = HotPlayModel.fromJson(response.result);
+    hotPlayModel = MusicModel.fromJson(response.result);
     if (hotPlayModel.subjects != null && hotPlayModel.subjects.length > 0) {
-      _loadingSink.add(LoadingState.success);
+      setLoadingState(LoadingState.success);
       _hotPlayDataSink.add(hotPlayModel);
     } else {
-      _loadingSink.add(LoadingState.empty);
+      setLoadingState(LoadingState.empty);
     }
   }
 
   _getHotPlayDataError(BaseResponse response) {
-    _loadingSink.add(LoadingState.intentError);
+    setLoadingState(LoadingState.intentError);
+  }
+
+  @override
+  void disposeBase() {
   }
 
   @override
   void dispose() {
     //因为是一级页面，页面切换也会调用该方法，所以不进行关闭
-//    _loadingSubject.close();
-//    _hotPlayDataSubject.close();
   }
 }

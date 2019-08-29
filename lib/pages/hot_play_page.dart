@@ -33,7 +33,7 @@ class HotPlayPage extends StatelessWidget {
             contentWidget: StreamBuilder(
                 initialData: _hotPlayBloc.hotPlayModel,
                 stream: _hotPlayBloc.hotPlayDataStream,
-                builder: (BuildContext context, AsyncSnapshot<HotPlayModel> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
                   return ConstrainedBox(
                     constraints: BoxConstraints.expand(),
                     child: Container(
@@ -134,7 +134,7 @@ class HotPlayPage extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(30), fontWeight: FontWeight.bold),
+                            color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(32), fontWeight: FontWeight.bold),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: Density.instance.dp(20)),
@@ -144,14 +144,14 @@ class HotPlayPage extends StatelessWidget {
                           children: <Widget>[
                             StaticRatingBar(
                               rate: data.rating.average / 2,
-                              size: Density.instance.dp(22),
+                              size: Density.instance.dp(24),
                               colorDark: ColorRes.TEXT_GRAY,
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: Density.instance.dp(10)),
                               child: Text(
                                 "${data.rating.average}",
-                                style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(20)),
+                                style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
                               ),
                             ),
                           ],
@@ -163,7 +163,7 @@ class HotPlayPage extends StatelessWidget {
                           msgStr,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(20)),
+                          style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(22)),
                         ),
                       ),
                     ],
@@ -188,7 +188,7 @@ class HotPlayPage extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 "购票",
-                                style: TextStyle(color: ColorRes.TEXT_RED),
+                                style: TextStyle(color: ColorRes.TEXT_RED, fontSize: Density.instance.sp(26)),
                               ),
                             ),
                           ),
@@ -197,7 +197,7 @@ class HotPlayPage extends StatelessWidget {
                           padding: EdgeInsets.only(top: Density.instance.dp(10)),
                           child: Text(
                             "1.4万人看过",
-                            style: TextStyle(color: ColorRes.LINE, fontSize: Density.instance.dp(18)),
+                            style: TextStyle(color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
                           ),
                         ),
                       ],

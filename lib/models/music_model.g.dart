@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'hot_play_model.dart';
+part of 'music_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-HotPlayModel _$HotPlayModelFromJson(Map<String, dynamic> json) {
-  return HotPlayModel(
+MusicModel _$MusicModelFromJson(Map<String, dynamic> json) {
+  return MusicModel(
       count: json['count'] as int,
       start: json['start'] as int,
       total: json['total'] as int,
@@ -19,7 +19,7 @@ HotPlayModel _$HotPlayModelFromJson(Map<String, dynamic> json) {
       title: json['title'] as String);
 }
 
-Map<String, dynamic> _$HotPlayModelToJson(HotPlayModel instance) =>
+Map<String, dynamic> _$MusicModelToJson(MusicModel instance) =>
     <String, dynamic>{
       'count': instance.count,
       'start': instance.start,

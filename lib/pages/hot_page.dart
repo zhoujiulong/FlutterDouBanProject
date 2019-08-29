@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/bloc_index.dart';
-import 'package:movie_sample/index/page_index.dart';
 import 'package:movie_sample/index/index.dart';
+import 'package:movie_sample/index/page_index.dart';
 
 class HotPage extends StatefulWidget {
   int currentPage = 0;
@@ -11,11 +11,8 @@ class HotPage extends StatefulWidget {
   HotPage() {
     tabItems = [Text("正在热映"), Text("即将上映")];
     tabPages = [
-      BlocProvider(
-        bloc: HotPlayBloc(),
-        child: HotPlayPage(),
-      ),
-      SoonPlayPage()
+      BlocProvider(bloc: HotPlayBloc(), child: HotPlayPage()),
+      BlocProvider(bloc: SoonPlayBloc(), child: SoonPlayPage())
     ];
   }
 
@@ -70,14 +67,16 @@ class _HotPageState extends State<HotPage> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: PageView(
-        controller: _pageController,
-        children: widget.tabPages,
-        onPageChanged: (index) {
-          widget.currentPage = index;
-          _tabController.animateTo(index);
-        },
-      ),
+      body: ScrollConfiguration(
+          behavior: MyScrollBehavior(),
+          child: PageView(
+            controller: _pageController,
+            children: widget.tabPages,
+            onPageChanged: (index) {
+              widget.currentPage = index;
+              _tabController.animateTo(index);
+            },
+          )),
     );
   }
 }
