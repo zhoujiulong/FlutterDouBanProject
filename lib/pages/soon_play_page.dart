@@ -33,28 +33,7 @@ class SoonPlayPage extends StatelessWidget {
                 initialData: _hotPlayBloc.musicModel,
                 stream: _hotPlayBloc.soonPlayStream,
                 builder: (BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
-                  return ConstrainedBox(
-                    constraints: BoxConstraints.expand(),
-                    child: Container(
-                      color: Colors.white,
-                      child: ScrollConfiguration(
-                          behavior: MyScrollBehavior(),
-                          child: SmartRefresher(
-                            controller: _refreshController,
-                            onRefresh: _refresh,
-                            header: ClassicHeader(),
-                            child: ListView.builder(
-                              itemCount: snapshot.data.subjects.length + 1,
-                              padding: EdgeInsets.all(0),
-                              itemBuilder: (context, index) {
-                                return index < snapshot.data.subjects.length
-                                    ? _buildItem(snapshot.data.subjects, index)
-                                    : _buildFooter();
-                              },
-                            ),
-                          )),
-                    ),
-                  );
+                  return _buildContentView(context, snapshot);
                 }),
             allRetryListener: () {
               _hotPlayBloc.setLoadingState(LoadingState.loading);
@@ -62,6 +41,35 @@ class SoonPlayPage extends StatelessWidget {
             },
           );
         });
+  }
+
+  //创建列表布局
+  Widget _buildContentView(BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
+    return ConstrainedBox(
+      constraints: BoxConstraints.expand(),
+      child: Container(
+        color: Colors.white,
+        child: ScrollConfiguration(
+            behavior: MyScrollBehavior(),
+            child: SmartRefresher(
+              controller: _refreshController,
+              onRefresh: _refresh,
+              header: ClassicHeader(),
+              child: _buildListView(snapshot.data.subjects),
+            )),
+      ),
+    );
+  }
+
+  //创建列表
+  Widget _buildListView(List<SubjectsModel> subjects) {
+    return ListView.builder(
+      itemCount: subjects.length + 1,
+      padding: EdgeInsets.all(0),
+      itemBuilder: (context, index) {
+        return index < subjects.length ? _buildItem(subjects, index) : _buildFooter();
+      },
+    );
   }
 
   //创建 item
