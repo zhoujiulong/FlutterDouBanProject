@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
 import 'package:movie_sample/index/index.dart';
 
 ///网络请求工具类，单例处理
@@ -74,6 +73,7 @@ class HttpUtil {
       }
     } catch (exception) {
       requestListener.onError(BaseResponse(_COMMON_REQUEST_ERROR, "请求失败", Map()));
+      LogUtil.d(exception.toString());
     }
   }
 

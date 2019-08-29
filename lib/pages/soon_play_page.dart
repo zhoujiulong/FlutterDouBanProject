@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+///即将上映
 class SoonPlayPage extends StatelessWidget {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   SoonPlayBloc _hotPlayBloc;
@@ -63,12 +65,41 @@ class SoonPlayPage extends StatelessWidget {
 
   //创建列表
   Widget _buildListView(List<SubjectsModel> subjects) {
-    return ListView.builder(
-      itemCount: subjects.length + 1,
-      padding: EdgeInsets.all(0),
-      itemBuilder: (context, index) {
-        return index < subjects.length ? _buildItem(subjects, index) : _buildFooter();
-      },
+    Map<String, List<SubjectsModel>> yearItem = Map<String, List<SubjectsModel>>();
+    subjects.forEach((SubjectsModel data) {
+      String year = data.pubdates[0].substring(0, data.pubdates[0].indexOf("("));
+      List<SubjectsModel> itemList;
+      if (yearItem.containsKey(year)) {
+        itemList = yearItem[year];
+      } else {
+        itemList = List<SubjectsModel>();
+        yearItem[year] = itemList;
+      }
+      itemList.add(data);
+    });
+
+    List<Widget> widgets = List<Widget>();
+    Iterable<String> keys = yearItem.keys;
+    for (int i = 0; i < keys.length; i++) {
+      String key = keys.elementAt(i);
+      widgets.add(_buildSliverSticky(key, yearItem[key], i == keys.length-1));
+    }
+
+    return CustomScrollView(
+      slivers: widgets,
+    );
+  }
+
+  //创建分组
+  Widget _buildSliverSticky(String year, List<SubjectsModel> items, bool isLast) {
+    return SliverStickyHeaderBuilder(
+      builder: (context, state) => _buildItemTopYear(year),
+      sliver: new SliverList(
+        delegate: new SliverChildBuilderDelegate(
+          (context, i) => isLast && i == items.length ? _buildFooter() : _buildItem(items, i),
+          childCount: isLast ? items.length + 1 : items.length,
+        ),
+      ),
     );
   }
 
@@ -105,24 +136,13 @@ class SoonPlayPage extends StatelessWidget {
     if (msgStr.endsWith("/")) {
       msgStr = msgStr.substring(0, msgStr.length - 1);
     }
-
-    bool showTopYear = index == 0 ||
-        (data.pubdates != null &&
-            list[index - 1].pubdates != null &&
-            list[index - 1].pubdates[0].substring(0, list[index - 1].pubdates[0].indexOf("(")) !=
-                data.pubdates[0].substring(0, data.pubdates[0].indexOf("(")));
-
-    return _buildItemView(list, data, index, title, msgStr, imgSrc, showTopYear);
+    return _buildItemView(list, data, index, title, msgStr, imgSrc);
   }
 
   //构建 item 控件
-  Widget _buildItemView(List<SubjectsModel> list, SubjectsModel data, int index, String title, String msgStr,
-      String imgSrc, bool showTopYear) {
+  Widget _buildItemView(
+      List<SubjectsModel> list, SubjectsModel data, int index, String title, String msgStr, String imgSrc) {
     List<Widget> childers = <Widget>[];
-    //判断是否显示年份标题
-    if (showTopYear) {
-      childers.add(_buildItemTopYear(data));
-    }
     childers.add(Padding(
       padding: EdgeInsets.only(
           left: Density.instance.dp(25),
@@ -150,7 +170,7 @@ class SoonPlayPage extends StatelessWidget {
   }
 
   //item 顶部年份
-  Widget _buildItemTopYear(SubjectsModel data) {
+  Widget _buildItemTopYear(String year) {
     return Container(
       height: Density.instance.dp(60),
       width: double.infinity,
@@ -159,7 +179,7 @@ class SoonPlayPage extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: Density.instance.dp(25)),
         child: Text(
-          data.pubdates[0].substring(0, data.pubdates[0].indexOf("(")),
+          year,
           style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(28)),
         ),
       ),
