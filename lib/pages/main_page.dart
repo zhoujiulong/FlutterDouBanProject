@@ -16,7 +16,7 @@ class MainPage extends StatelessWidget {
   final List<Widget> widgetOptions = [
     HotPage(),
     FindMoviePage(),
-    AccountPage(),
+    BlocProvider(bloc: AccountBloc(), child: AccountPage()),
   ];
 
   @override

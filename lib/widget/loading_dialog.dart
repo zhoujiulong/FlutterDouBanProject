@@ -12,7 +12,7 @@ class LoadingDialog extends StatefulWidget {
   //监听弹窗消失
   final Function dismissListener;
 
-  LoadingDialog({Key key, this.loadingText = "loading...", this.outsideDismiss = true, this.dismissListener})
+  LoadingDialog({Key key, this.loadingText = "loading...", this.outsideDismiss = false, this.dismissListener})
       : super(key: key);
 
   @override

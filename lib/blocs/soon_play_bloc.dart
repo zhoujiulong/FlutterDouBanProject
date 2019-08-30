@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -31,6 +32,7 @@ class SoonPlayBloc extends BlocBase {
 
   _getHotPlayDataError(BaseResponse response) {
     setLoadingState(LoadingState.intentError);
+    Fluttertoast.showToast(msg: response.message);
   }
 
   @override
