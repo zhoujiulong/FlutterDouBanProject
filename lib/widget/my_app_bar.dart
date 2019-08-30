@@ -39,8 +39,6 @@ class _MYAppBarState extends State<MYAppBar> {
   Widget build(BuildContext context) {
     //如果需要添加标题右侧按钮或者右侧副标题可添加进来
     List<Widget> children = <Widget>[];
-    //添加背景色
-    children.add(Positioned.fill(child: Material(color: widget.backgroundColor)));
     //添加标题，标题颜色和字体大小一般固定所以写死
     children.add(Center(
       child: Text(
@@ -74,10 +72,13 @@ class _MYAppBarState extends State<MYAppBar> {
       ));
     }
 
-    return SafeArea(
-      top: true,
-      child: Stack(
-        children: children,
+    return Container(
+      color: widget.backgroundColor,
+      child: SafeArea(
+        top: true,
+        child: Stack(
+          children: children,
+        ),
       ),
     );
   }

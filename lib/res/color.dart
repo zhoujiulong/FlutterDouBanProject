@@ -8,4 +8,5 @@ class ColorRes {
   static const Color LINE = Color.fromARGB(100, 190, 190, 190);
   static const Color YELLOW = Color.fromARGB(255, 255, 164, 0);
   static const Color WINDOW_BG = Color.fromARGB(255, 248, 248, 248);
+  static const Color ACCOUNT_PAGE_TOP_BG = Color.fromARGB(255, 104, 155, 255);
 }

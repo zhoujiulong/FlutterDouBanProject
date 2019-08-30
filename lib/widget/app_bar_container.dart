@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ///使用传进来的控件作为标题
 class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
-  AppBarContainer({@required this.child, this.height, this.backgroundColor = Colors.transparent});
+  AppBarContainer({@required this.child, this.height = 0, this.backgroundColor = Colors.transparent});
 
   final Widget child;
   final double height;
@@ -18,19 +18,18 @@ class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     //如果需要添加标题右侧按钮或者右侧副标题可添加进来
     List<Widget> children = <Widget>[];
-    children.add(child);
+    if (child != null) {
+      children.add(child);
+    }
 
-    return SafeArea(
-      top: true,
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(child: Material(color: backgroundColor)),
-          Column(
+    return Container(
+      color: backgroundColor,
+      child: SafeArea(
+          top: true,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: children,
-          )
-        ],
-      ),
+          )),
     );
   }
 }
