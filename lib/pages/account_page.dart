@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -14,13 +16,30 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
-    Timer(Duration(milliseconds: 50), () {
-      _accountBloc.getDataByType(context, COLLECTION_TYPE.WANT_LOOK);
-    });
+    if (_accountBloc.eventModel.musicModel == null) {
+      Timer(Duration(milliseconds: 50), () {
+        _accountBloc.getDataByType(context, COLLECTION_TYPE.WANT_LOOK);
+      });
+    }
 
     List<Widget> widgets = <Widget>[];
     widgets.add(_buildTopWidget());
+    widgets.add(SliverPersistentHeader(
+      floating: true,
+      pinned: true,
+      delegate: _SliverAppBarDelegate(
+        minHeight: Density.instance.dp(88),
+        maxHeight: Density.instance.dp(88),
+        child: Container(
+          color: ColorRes.ACCOUNT_PAGE_TOP_BG,
+          child: Stack(
+            children: <Widget>[],
+          ),
+        ),
+      ),
+    ));
     widgets.add(StreamBuilder(
+      initialData: _accountBloc.eventModel,
       stream: _accountBloc.collectionStream,
       builder: (BuildContext context, AsyncSnapshot<AccountListEventModel> snapshot) {
         AccountListEventModel model = snapshot.data;
@@ -31,8 +50,8 @@ class AccountPage extends StatelessWidget {
             (model == null || model.collectionType == null) ? COLLECTION_TYPE.WANT_LOOK : model.collectionType;
 
         return SliverStickyHeaderBuilder(
-          builder: (context, state) => _buildStickyBar(context, type),
-          sliver: _buildList(subjects),
+          builder: (context, state) => _buildStickyBar(context, type, subjects.length),
+          sliver: _ButtomList(subjects),
         );
       },
     ));
@@ -43,18 +62,6 @@ class AccountPage extends StatelessWidget {
         backgroundColor: ColorRes.ACCOUNT_PAGE_TOP_BG,
       ),
       body: Listener(
-        onPointerDown: (event) {
-          LogUtil.d("zhoujiulong:onPointerDown");
-          LogUtil.d(event.toString());
-        },
-        onPointerMove: (event) {
-          LogUtil.d("zhoujiulong:onPointerMove");
-          LogUtil.d(event.toString());
-        },
-        onPointerUp: (event) {
-          LogUtil.d("zhoujiulong:onPointerUp");
-          LogUtil.d(event.toString());
-        },
         child: Stack(
           children: <Widget>[
             Container(
@@ -76,7 +83,7 @@ class AccountPage extends StatelessWidget {
                     return SmartRefresher(
                       controller: _refreshController,
                       onRefresh: () {
-                        _accountBloc.getDataByType(context, _accountBloc.currentType, isRefresh: true);
+                        _accountBloc.getDataByType(context, _accountBloc.eventModel.collectionType, isRefresh: true);
                       },
                       header: ClassicHeader(),
                       child: CustomScrollView(
@@ -84,6 +91,18 @@ class AccountPage extends StatelessWidget {
                       ),
                     );
                   }),
+            ),
+            Positioned(
+              top: Density.instance.dp(19),
+              right: Density.instance.dp(30),
+              child: Container(
+                width: Density.instance.dp(50),
+                height: Density.instance.dp(50),
+                child: Image.asset(
+                  ImageUtil.getImagePath("ic_setting"),
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
           ],
         ),
@@ -168,26 +187,10 @@ class AccountPage extends StatelessWidget {
       ),
     ));
 
-    //右侧设置图标
-    widgets.add(
-      Positioned(
-        top: Density.instance.dp(30),
-        right: Density.instance.dp(30),
-        child: Container(
-          width: Density.instance.dp(54),
-          height: Density.instance.dp(54),
-          child: Image.asset(
-            ImageUtil.getImagePath("ic_setting"),
-            fit: BoxFit.fill,
-          ),
-        ),
-      ),
-    );
-
     return SliverToBoxAdapter(
       child: Container(
         width: double.infinity,
-        height: Density.instance.dp(350),
+        height: Density.instance.dp(270),
         color: ColorRes.ACCOUNT_PAGE_TOP_BG,
         child: Stack(
           children: widgets,
@@ -197,7 +200,7 @@ class AccountPage extends StatelessWidget {
   }
 
   //构建吸顶部分
-  Widget _buildStickyBar(BuildContext context, COLLECTION_TYPE choiceType) {
+  Widget _buildStickyBar(BuildContext context, COLLECTION_TYPE choiceType, int size) {
     List<Widget> widgets = <Widget>[];
 
     //左侧描述文案
@@ -211,7 +214,7 @@ class AccountPage extends StatelessWidget {
     widgets.add(Padding(
       padding: EdgeInsets.only(left: Density.instance.dp(8)),
       child: Text(
-        "5",
+        "$size",
         style: TextStyle(
           color: ColorRes.TEXT_GRAY,
           fontSize: Density.instance.sp(26),
@@ -262,15 +265,20 @@ class AccountPage extends StatelessWidget {
         ),
       ),
     );
-    widgets.add(Padding(
-      padding: EdgeInsets.only(
-        left: Density.instance.dp(8),
-      ),
-      child: Text(
-        "筛选",
-        style: TextStyle(
-          color: ColorRes.TEXT_HAVY,
-          fontSize: Density.instance.sp(28),
+    widgets.add(GestureDetector(
+      onTap: () {
+        Fluttertoast.showToast(msg: "筛选功能正在开发中");
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: Density.instance.dp(8),
+        ),
+        child: Text(
+          "筛选",
+          style: TextStyle(
+            color: ColorRes.TEXT_HAVY,
+            fontSize: Density.instance.sp(28),
+          ),
         ),
       ),
     ));
@@ -334,6 +342,18 @@ class AccountPage extends StatelessWidget {
       onTap: _choiceCollectionType,
       child: child,
     );
+  }
+}
+
+///底部列表
+class _ButtomList extends StatelessWidget {
+  List<SubjectsModel> subjects;
+
+  _ButtomList(this.subjects);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildList(subjects);
   }
 
   //构建底部列表
@@ -507,5 +527,33 @@ class AccountPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => max(maxHeight, minHeight);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return new SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
   }
 }

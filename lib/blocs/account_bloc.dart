@@ -13,14 +13,13 @@ class AccountBloc extends BlocBase {
 
   Stream<AccountListEventModel> get collectionStream => _collectionSubject.stream;
 
-  MusicModel musicModel;
-  COLLECTION_TYPE currentType = COLLECTION_TYPE.WANT_LOOK;
+  AccountListEventModel eventModel = AccountListEventModel(null, COLLECTION_TYPE.WANT_LOOK);
   bool _dialogDismiss = true;
 
   void setCollection(COLLECTION_TYPE type) {
-    if (type == currentType) return;
-    currentType = type;
-    _collectionSink.add(AccountListEventModel(musicModel, type));
+    if (type == eventModel.collectionType) return;
+    eventModel.collectionType = type;
+    _collectionSink.add(eventModel);
   }
 
   void getDataByType(BuildContext context, COLLECTION_TYPE type, {bool isRefresh = false}) {
@@ -56,9 +55,9 @@ class AccountBloc extends BlocBase {
               Navigator.pop(context);
             }
             if (isRefresh) setLoadingState(LoadingState.success);
-            musicModel = MusicModel.fromJson(response.result);
-            if (musicModel.subjects != null && musicModel.subjects.length > 0) {
-              _collectionSink.add(AccountListEventModel(musicModel, currentType));
+            eventModel.musicModel = MusicModel.fromJson(response.result);
+            if (eventModel.musicModel.subjects != null && eventModel.musicModel.subjects.length > 0) {
+              _collectionSink.add(eventModel);
             }
           },
           error: (BaseResponse response) {
@@ -82,6 +81,10 @@ class AccountBloc extends BlocBase {
         return "看过";
     }
     return "想看";
+  }
+
+  @override
+  void disposeBase() {
   }
 
   @override
