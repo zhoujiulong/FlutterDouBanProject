@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider<ApplicationBloc>(
       bloc: ApplicationBloc(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: '豆瓣电影',
         theme: ThemeData(primaryColor: Colors.white, scaffoldBackgroundColor: Colors.white),
         home: SplashPage(),
       ),
