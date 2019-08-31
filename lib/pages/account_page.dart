@@ -18,6 +18,7 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
+    _accountBloc.setScroll(0);
     if (_accountBloc.eventModel.musicModel == null) {
       Timer(Duration(milliseconds: 50), () {
         _accountBloc.getDataByType(context, COLLECTION_TYPE.WANT_LOOK);
@@ -27,9 +28,10 @@ class AccountPage extends StatelessWidget {
 
     Function _setScroll = () {
       RenderBox renderBox = _globalKey.currentContext.findRenderObject();
-      Offset offset = renderBox.localToGlobal(Offset.zero);
+      Offset offset =
+          renderBox.localToGlobal(Offset(0.0, renderBox.size.height));
       if (locationY < 0) locationY = offset.dy;
-      _accountBloc.setScroll(offset.dy - locationY);
+      _accountBloc.setScroll(locationY - offset.dy);
     };
     _controller.addListener(_setScroll);
 
@@ -74,9 +76,19 @@ class AccountPage extends StatelessWidget {
     ));
 
     return Scaffold(
-      appBar: AppBarContainer(
-        child: null,
-        backgroundColor: ColorRes.ACCOUNT_PAGE_TOP_BG,
+      appBar: PreferredSizeContainer(
+        height: 0,
+        child: StreamBuilder(
+          initialData: false,
+          stream: _accountBloc.titleBgAlphaPercentStream,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            return AppBarContainer(
+              child: null,
+              backgroundColor:
+                  snapshot.data ? Colors.white : ColorRes.ACCOUNT_PAGE_TOP_BG,
+            );
+          },
+        ),
       ),
       body: Listener(
         onPointerUp: (event) {
@@ -122,19 +134,19 @@ class AccountPage extends StatelessWidget {
               ),
             ),
             StreamBuilder(
-              initialData: 0.0,
+              initialData: false,
               stream: _accountBloc.titleBgAlphaPercentStream,
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                 return Container(
                   width: double.infinity,
                   height: Density.instance.dp(88),
-                  color: snapshot.data > 50 ? Colors.white : Colors.transparent,
+                  color: snapshot.data ? Colors.white : Colors.transparent,
                   child: Center(
                     child: Text(
                       "long",
                       style: TextStyle(
                         fontSize: Density.instance.sp(32),
-                        color: snapshot.data > 50
+                        color: snapshot.data
                             ? Color.fromARGB(255, 51, 51, 51)
                             : Colors.transparent,
                       ),

@@ -15,12 +15,12 @@ class AccountBloc extends BlocBase {
   Stream<AccountListEventModel> get collectionStream =>
       _collectionSubject.stream;
 
-  BehaviorSubject<double> _titleBgAlphaPercentSubject =
-      BehaviorSubject<double>();
+  BehaviorSubject<bool> _titleBgAlphaPercentSubject =
+      BehaviorSubject<bool>();
 
-  Sink<double> get _titleBgAlphaPercentSink => _titleBgAlphaPercentSubject.sink;
+  Sink<bool> get _titleBgAlphaPercentSink => _titleBgAlphaPercentSubject.sink;
 
-  Stream<double> get titleBgAlphaPercentStream =>
+  Stream<bool> get titleBgAlphaPercentStream =>
       _titleBgAlphaPercentSubject.stream;
 
   AccountListEventModel eventModel =
@@ -34,10 +34,7 @@ class AccountBloc extends BlocBase {
   }
 
   void setScroll(double scrollY) {
-    double percent = 0 - scrollY * 100 / Density.instance.dp(270);
-    LogUtil.d("zhoujiulong.percent:$percent");
-    if (percent > 100) return;
-    _titleBgAlphaPercentSink.add(percent);
+    _titleBgAlphaPercentSink.add(scrollY >= Density.instance.dp(270));
   }
 
   void getDataByType(BuildContext context, COLLECTION_TYPE type,
