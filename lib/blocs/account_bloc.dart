@@ -7,13 +7,24 @@ import 'package:rxdart/rxdart.dart';
 enum COLLECTION_TYPE { WANT_LOOK, LOOKING, SEEN }
 
 class AccountBloc extends BlocBase {
-  BehaviorSubject<AccountListEventModel> _collectionSubject = BehaviorSubject<AccountListEventModel>();
+  BehaviorSubject<AccountListEventModel> _collectionSubject =
+      BehaviorSubject<AccountListEventModel>();
 
   Sink<AccountListEventModel> get _collectionSink => _collectionSubject.sink;
 
-  Stream<AccountListEventModel> get collectionStream => _collectionSubject.stream;
+  Stream<AccountListEventModel> get collectionStream =>
+      _collectionSubject.stream;
 
-  AccountListEventModel eventModel = AccountListEventModel(null, COLLECTION_TYPE.WANT_LOOK);
+  BehaviorSubject<double> _titleBgAlphaPercentSubject =
+      BehaviorSubject<double>();
+
+  Sink<double> get _titleBgAlphaPercentSink => _titleBgAlphaPercentSubject.sink;
+
+  Stream<double> get titleBgAlphaPercentStream =>
+      _titleBgAlphaPercentSubject.stream;
+
+  AccountListEventModel eventModel =
+      AccountListEventModel(null, COLLECTION_TYPE.WANT_LOOK);
   bool _dialogDismiss = true;
 
   void setCollection(COLLECTION_TYPE type) {
@@ -22,7 +33,15 @@ class AccountBloc extends BlocBase {
     _collectionSink.add(eventModel);
   }
 
-  void getDataByType(BuildContext context, COLLECTION_TYPE type, {bool isRefresh = false}) {
+  void setScroll(double scrollY) {
+    double percent = 0 - scrollY * 100 / Density.instance.dp(270);
+    LogUtil.d("zhoujiulong.percent:$percent");
+    if (percent > 100) return;
+    _titleBgAlphaPercentSink.add(percent);
+  }
+
+  void getDataByType(BuildContext context, COLLECTION_TYPE type,
+      {bool isRefresh = false}) {
     //模拟一下数据
     int start = 5;
     if (type == COLLECTION_TYPE.LOOKING) {
@@ -56,7 +75,8 @@ class AccountBloc extends BlocBase {
             }
             if (isRefresh) setLoadingState(LoadingState.success);
             eventModel.musicModel = MusicModel.fromJson(response.result);
-            if (eventModel.musicModel.subjects != null && eventModel.musicModel.subjects.length > 0) {
+            if (eventModel.musicModel.subjects != null &&
+                eventModel.musicModel.subjects.length > 0) {
               _collectionSink.add(eventModel);
             }
           },
@@ -84,8 +104,7 @@ class AccountBloc extends BlocBase {
   }
 
   @override
-  void disposeBase() {
-  }
+  void disposeBase() {}
 
   @override
   void dispose() {}

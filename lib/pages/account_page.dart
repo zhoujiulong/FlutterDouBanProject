@@ -10,8 +10,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 ///我的主页
 class AccountPage extends StatelessWidget {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   AccountBloc _accountBloc;
+  GlobalKey _globalKey = GlobalKey();
+  ScrollController _controller = ScrollController();
+  RefreshController _refreshController = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,15 @@ class AccountPage extends StatelessWidget {
         _accountBloc.getDataByType(context, COLLECTION_TYPE.WANT_LOOK);
       });
     }
+    double locationY = -1;
+
+    Function _setScroll = () {
+      RenderBox renderBox = _globalKey.currentContext.findRenderObject();
+      Offset offset = renderBox.localToGlobal(Offset.zero);
+      if (locationY < 0) locationY = offset.dy;
+      _accountBloc.setScroll(offset.dy - locationY);
+    };
+    _controller.addListener(_setScroll);
 
     List<Widget> widgets = <Widget>[];
     widgets.add(_buildTopWidget());
@@ -31,6 +42,7 @@ class AccountPage extends StatelessWidget {
         minHeight: Density.instance.dp(88),
         maxHeight: Density.instance.dp(88),
         child: Container(
+          key: _globalKey,
           color: ColorRes.ACCOUNT_PAGE_TOP_BG,
           child: Stack(
             children: <Widget>[],
@@ -41,16 +53,21 @@ class AccountPage extends StatelessWidget {
     widgets.add(StreamBuilder(
       initialData: _accountBloc.eventModel,
       stream: _accountBloc.collectionStream,
-      builder: (BuildContext context, AsyncSnapshot<AccountListEventModel> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<AccountListEventModel> snapshot) {
         AccountListEventModel model = snapshot.data;
-        List<SubjectsModel> subjects = (model == null || model.musicModel == null || model.musicModel.subjects == null)
+        List<SubjectsModel> subjects = (model == null ||
+                model.musicModel == null ||
+                model.musicModel.subjects == null)
             ? <SubjectsModel>[]
             : model.musicModel.subjects;
-        COLLECTION_TYPE type =
-            (model == null || model.collectionType == null) ? COLLECTION_TYPE.WANT_LOOK : model.collectionType;
+        COLLECTION_TYPE type = (model == null || model.collectionType == null)
+            ? COLLECTION_TYPE.WANT_LOOK
+            : model.collectionType;
 
         return SliverStickyHeaderBuilder(
-          builder: (context, state) => _buildStickyBar(context, type, subjects.length),
+          builder: (context, state) =>
+              _buildStickyBar(context, type, subjects.length),
           sliver: _ButtomList(subjects),
         );
       },
@@ -62,6 +79,11 @@ class AccountPage extends StatelessWidget {
         backgroundColor: ColorRes.ACCOUNT_PAGE_TOP_BG,
       ),
       body: Listener(
+        onPointerUp: (event) {
+          Timer(Duration(milliseconds: 200), () {
+            _setScroll();
+          });
+        },
         child: Stack(
           children: <Widget>[
             Container(
@@ -72,25 +94,54 @@ class AccountPage extends StatelessWidget {
             ScrollConfiguration(
               behavior: MyScrollBehavior(),
               child: StreamBuilder(
-                  initialData: LoadingState.success,
-                  stream: _accountBloc.loadingStream,
-                  builder: (BuildContext context, AsyncSnapshot<LoadingState> snapshot) {
-                    if (snapshot.data == LoadingState.success) {
-                      _refreshController.refreshCompleted();
-                    } else {
-                      _refreshController.refreshFailed();
-                    }
-                    return SmartRefresher(
-                      controller: _refreshController,
-                      onRefresh: () {
-                        _accountBloc.getDataByType(context, _accountBloc.eventModel.collectionType, isRefresh: true);
-                      },
-                      header: ClassicHeader(),
-                      child: CustomScrollView(
-                        slivers: widgets,
+                initialData: LoadingState.success,
+                stream: _accountBloc.loadingStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<LoadingState> snapshot) {
+                  if (snapshot.data == LoadingState.success) {
+                    _refreshController.refreshCompleted();
+                  } else {
+                    _refreshController.refreshFailed();
+                  }
+                  return SmartRefresher(
+                    controller: _refreshController,
+                    onRefresh: () {
+                      _accountBloc.getDataByType(
+                        context,
+                        _accountBloc.eventModel.collectionType,
+                        isRefresh: true,
+                      );
+                    },
+                    header: ClassicHeader(),
+                    child: CustomScrollView(
+                      controller: _controller,
+                      slivers: widgets,
+                    ),
+                  );
+                },
+              ),
+            ),
+            StreamBuilder(
+              initialData: 0.0,
+              stream: _accountBloc.titleBgAlphaPercentStream,
+              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+                return Container(
+                  width: double.infinity,
+                  height: Density.instance.dp(88),
+                  color: snapshot.data > 50 ? Colors.white : Colors.transparent,
+                  child: Center(
+                    child: Text(
+                      "long",
+                      style: TextStyle(
+                        fontSize: Density.instance.sp(32),
+                        color: snapshot.data > 50
+                            ? Color.fromARGB(255, 51, 51, 51)
+                            : Colors.transparent,
                       ),
-                    );
-                  }),
+                    ),
+                  ),
+                );
+              },
             ),
             Positioned(
               top: Density.instance.dp(19),
@@ -123,7 +174,8 @@ class AccountPage extends StatelessWidget {
           width: Density.instance.dp(160),
           height: Density.instance.dp(160),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: Density.instance.dp(4)),
+            border:
+                Border.all(color: Colors.white, width: Density.instance.dp(4)),
             borderRadius: BorderRadius.circular(Density.instance.dp(80)),
           ),
           child: ClipRRect(
@@ -160,8 +212,10 @@ class AccountPage extends StatelessWidget {
               width: Density.instance.dp(260),
               height: Density.instance.dp(70),
               decoration: BoxDecoration(
-                border: Border.all(width: Density.instance.dp(2), color: Colors.white),
-                borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(8))),
+                border: Border.all(
+                    width: Density.instance.dp(2), color: Colors.white),
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Density.instance.dp(8))),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -177,7 +231,8 @@ class AccountPage extends StatelessWidget {
                   SizedBox(width: Density.instance.dp(20)),
                   Text(
                     "我的电影票",
-                    style: TextStyle(color: Colors.white, fontSize: Density.instance.sp(26)),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: Density.instance.sp(26)),
                   )
                 ],
               ),
@@ -200,7 +255,8 @@ class AccountPage extends StatelessWidget {
   }
 
   //构建吸顶部分
-  Widget _buildStickyBar(BuildContext context, COLLECTION_TYPE choiceType, int size) {
+  Widget _buildStickyBar(
+      BuildContext context, COLLECTION_TYPE choiceType, int size) {
     List<Widget> widgets = <Widget>[];
 
     //左侧描述文案
@@ -226,9 +282,12 @@ class AccountPage extends StatelessWidget {
 
     //中间类型
     List<Widget> typeWidgets = <Widget>[];
-    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.WANT_LOOK, choiceType == COLLECTION_TYPE.WANT_LOOK));
-    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.LOOKING, choiceType == COLLECTION_TYPE.LOOKING));
-    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.SEEN, choiceType == COLLECTION_TYPE.SEEN));
+    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.WANT_LOOK,
+        choiceType == COLLECTION_TYPE.WANT_LOOK));
+    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.LOOKING,
+        choiceType == COLLECTION_TYPE.LOOKING));
+    typeWidgets.add(_buildTypeButton(
+        context, COLLECTION_TYPE.SEEN, choiceType == COLLECTION_TYPE.SEEN));
     widgets.add(Padding(
       padding: EdgeInsets.only(right: Density.instance.dp(20)),
       child: ClipRRect(
@@ -298,7 +357,8 @@ class AccountPage extends StatelessWidget {
   }
 
   //创建类型按钮
-  Widget _buildTypeButton(BuildContext context, COLLECTION_TYPE type, bool checked) {
+  Widget _buildTypeButton(
+      BuildContext context, COLLECTION_TYPE type, bool checked) {
     _choiceCollectionType() {
       _accountBloc.setCollection(type);
       _accountBloc.getDataByType(context, type);
@@ -310,8 +370,10 @@ class AccountPage extends StatelessWidget {
         width: Density.instance.dp(90),
         height: Density.instance.dp(60),
         decoration: BoxDecoration(
-          border: Border.all(width: Density.instance.dp(2), color: ColorRes.LINE),
-          borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(30))),
+          border:
+              Border.all(width: Density.instance.dp(2), color: ColorRes.LINE),
+          borderRadius:
+              BorderRadius.all(Radius.circular(Density.instance.dp(30))),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Density.instance.dp(30)),
@@ -320,7 +382,9 @@ class AccountPage extends StatelessWidget {
             child: Center(
               child: Text(
                 _accountBloc.getTypeDesc(type),
-                style: TextStyle(color: ColorRes.TEXT_NORMAL, fontSize: Density.instance.sp(26)),
+                style: TextStyle(
+                    color: ColorRes.TEXT_NORMAL,
+                    fontSize: Density.instance.sp(26)),
               ),
             ),
           ),
@@ -333,7 +397,8 @@ class AccountPage extends StatelessWidget {
         child: Center(
           child: Text(
             _accountBloc.getTypeDesc(type),
-            style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
+            style: TextStyle(
+                color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
           ),
         ),
       );
@@ -363,7 +428,9 @@ class _ButtomList extends StatelessWidget {
         (context, index) {
           return Container(
             color: Colors.white,
-            child: index < subjects.length ? _buildItem(subjects[index]) : _buildFooter(),
+            child: index < subjects.length
+                ? _buildItem(subjects[index])
+                : _buildFooter(),
           );
         },
         childCount: subjects.length > 0 ? subjects.length + 1 : 0,
@@ -407,7 +474,8 @@ class _ButtomList extends StatelessWidget {
   }
 
   //构建 item 控件
-  Widget _buildItemWidget(SubjectsModel data, String title, String imgSrc, String msgStr) {
+  Widget _buildItemWidget(
+      SubjectsModel data, String title, String imgSrc, String msgStr) {
     return Column(
       children: <Widget>[
         Padding(
@@ -452,7 +520,8 @@ class _ButtomList extends StatelessWidget {
   //构建 item 中间信息
   Widget _buildItemCenterMsg(SubjectsModel data, String title, String msgStr) {
     return Padding(
-      padding: EdgeInsets.only(left: Density.instance.dp(26), right: Density.instance.dp(10)),
+      padding: EdgeInsets.only(
+          left: Density.instance.dp(26), right: Density.instance.dp(10)),
       child: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -462,8 +531,10 @@ class _ButtomList extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(32), fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: ColorRes.TEXT_HAVY,
+                  fontSize: Density.instance.sp(32),
+                  fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: EdgeInsets.only(top: Density.instance.dp(20)),
@@ -480,7 +551,9 @@ class _ButtomList extends StatelessWidget {
                     padding: EdgeInsets.only(left: Density.instance.dp(10)),
                     child: Text(
                       "${data.rating.average}",
-                      style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
+                      style: TextStyle(
+                          color: ColorRes.TEXT_GRAY,
+                          fontSize: Density.instance.sp(26)),
                     ),
                   ),
                 ],
@@ -492,7 +565,9 @@ class _ButtomList extends StatelessWidget {
                 msgStr,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(22)),
+                style: TextStyle(
+                    color: ColorRes.TEXT_GRAY,
+                    fontSize: Density.instance.sp(22)),
               ),
             ),
           ],
@@ -514,10 +589,13 @@ class _ButtomList extends StatelessWidget {
             width: Density.instance.dp(30),
           ),
           Padding(
-              padding: EdgeInsets.only(left: Density.instance.dp(15), right: Density.instance.dp(15)),
+              padding: EdgeInsets.only(
+                  left: Density.instance.dp(15),
+                  right: Density.instance.dp(15)),
               child: Text(
                 "THE END",
-                style: TextStyle(color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
+                style: TextStyle(
+                    color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
               )),
           Container(
             color: ColorRes.LINE,
@@ -548,12 +626,15 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => max(maxHeight, minHeight);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new SizedBox.expand(child: child);
   }
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
