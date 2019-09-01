@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
   //Item对应的页面
   final List<Widget> widgetOptions = [
     HotPage(),
-    FindMoviePage(),
+    FindPage(),
     BlocProvider(bloc: AccountBloc(), child: AccountPage()),
   ];
 
