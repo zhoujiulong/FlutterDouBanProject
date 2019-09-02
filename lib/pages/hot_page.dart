@@ -28,29 +28,18 @@ class _HotPageState extends State<HotPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _tabController = TabController(
-        length: widget.tabItems.length,
-        initialIndex: widget.currentPage,
-        vsync: this);
-    _pageController =
-        PageController(initialPage: widget.currentPage, keepPage: true);
+    _tabController = TabController(length: widget.tabItems.length, initialIndex: widget.currentPage, vsync: this);
+    _pageController = PageController(initialPage: widget.currentPage, keepPage: true);
     return Scaffold(
       appBar: AppBarContainer(
         height: Density.instance.dp(168),
         child: Column(
           children: <Widget>[
             Container(
+              padding: EdgeInsets.only(left: Density.instance.dp(25), right: Density.instance.dp(25)),
               width: double.infinity,
-              height: Density.instance.dp(88),
-              child: Center(
-                child: Text(
-                  "热映",
-                  style: TextStyle(
-                    fontSize: Density.instance.sp(32),
-                    color: Color.fromARGB(255, 51, 51, 51),
-                  ),
-                ),
-              ),
+              height: Density.instance.dp(66),
+              child: SearchWidget(),
             ),
             TabBar(
               controller: _tabController,
@@ -60,9 +49,7 @@ class _HotPageState extends State<HotPage> with SingleTickerProviderStateMixin {
               indicatorColor: Color.fromARGB(255, 51, 51, 51),
               indicatorWeight: Density.instance.dp(4),
               indicatorSize: TabBarIndicatorSize.label,
-              labelPadding: EdgeInsets.only(
-                  bottom: Density.instance.dp(10),
-                  top: Density.instance.dp(25)),
+              labelPadding: EdgeInsets.only(bottom: Density.instance.dp(10), top: Density.instance.dp(25)),
               labelColor: Color.fromARGB(255, 51, 51, 51),
               labelStyle: TextStyle(
                 fontSize: Density.instance.sp(28),
