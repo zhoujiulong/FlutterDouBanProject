@@ -7,13 +7,13 @@ import 'package:rxdart/rxdart.dart';
 class HotPlayBloc extends BlocBase {
 
 
-  BehaviorSubject<MusicModel> _hotPlayDataSubject = BehaviorSubject<MusicModel>();
+  BehaviorSubject<MovieModel> _hotPlayDataSubject = BehaviorSubject<MovieModel>();
 
-  Sink<MusicModel> get _hotPlayDataSink => _hotPlayDataSubject.sink;
+  Sink<MovieModel> get _hotPlayDataSink => _hotPlayDataSubject.sink;
 
-  Stream<MusicModel> get hotPlayDataStream => _hotPlayDataSubject.stream;
+  Stream<MovieModel> get hotPlayDataStream => _hotPlayDataSubject.stream;
 
-  MusicModel hotPlayModel;
+  MovieModel hotPlayModel;
 
   void getHotPlayData() {
     FormData params = FormData();
@@ -25,7 +25,7 @@ class HotPlayBloc extends BlocBase {
   }
 
   _getHotPlayDataSuccess(BaseResponse response) {
-    hotPlayModel = MusicModel.fromJson(response.result);
+    hotPlayModel = MovieModel.fromJson(response.result);
     if (hotPlayModel.subjects != null && hotPlayModel.subjects.length > 0) {
       setLoadingState(LoadingState.success);
       _hotPlayDataSink.add(hotPlayModel);

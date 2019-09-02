@@ -16,12 +16,12 @@ class SoonPlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _hotPlayBloc = BlocProvider.of<SoonPlayBloc>(context);
-    if (_hotPlayBloc.musicModel == null) {
+    if (_hotPlayBloc.movieModel == null) {
       _hotPlayBloc.getSoonPlayData();
     }
 
     return StreamBuilder(
-        initialData: _hotPlayBloc.musicModel == null ? LoadingState.loading : LoadingState.success,
+        initialData: _hotPlayBloc.movieModel == null ? LoadingState.loading : LoadingState.success,
         stream: _hotPlayBloc.loadingStream,
         builder: (BuildContext context, AsyncSnapshot<LoadingState> snapshot) {
           if (snapshot.data == LoadingState.success) {
@@ -32,9 +32,9 @@ class SoonPlayPage extends StatelessWidget {
           return LoadingView(
             state: snapshot.data,
             contentWidget: StreamBuilder(
-                initialData: _hotPlayBloc.musicModel,
+                initialData: _hotPlayBloc.movieModel,
                 stream: _hotPlayBloc.soonPlayStream,
-                builder: (BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
                   return _buildContentView(context, snapshot);
                 }),
             allRetryListener: () {
@@ -46,7 +46,7 @@ class SoonPlayPage extends StatelessWidget {
   }
 
   //创建列表布局
-  Widget _buildContentView(BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
+  Widget _buildContentView(BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
     return ConstrainedBox(
       constraints: BoxConstraints.expand(),
       child: Container(

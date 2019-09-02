@@ -2,8 +2,8 @@ import 'package:movie_sample/index/index.dart';
 
 ///我的主页列表消息实体类
 class AccountListEventModel {
-  AccountListEventModel(this.musicModel, this.collectionType);
+  AccountListEventModel(this.movieModel, this.collectionType);
 
-  MusicModel musicModel;
+  MovieModel movieModel;
   COLLECTION_TYPE collectionType;
 }

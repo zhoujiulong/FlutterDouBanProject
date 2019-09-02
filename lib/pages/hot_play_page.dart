@@ -33,7 +33,7 @@ class HotPlayPage extends StatelessWidget {
             contentWidget: StreamBuilder(
                 initialData: _hotPlayBloc.hotPlayModel,
                 stream: _hotPlayBloc.hotPlayDataStream,
-                builder: (BuildContext context, AsyncSnapshot<MusicModel> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
                   return ConstrainedBox(
                     constraints: BoxConstraints.expand(),
                     child: Container(

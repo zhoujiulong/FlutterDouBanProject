@@ -71,9 +71,9 @@ class AccountBloc extends BlocBase {
               Navigator.pop(context);
             }
             if (isRefresh) setLoadingState(LoadingState.success);
-            eventModel.musicModel = MusicModel.fromJson(response.result);
-            if (eventModel.musicModel.subjects != null &&
-                eventModel.musicModel.subjects.length > 0) {
+            eventModel.movieModel = MovieModel.fromJson(response.result);
+            if (eventModel.movieModel.subjects != null &&
+                eventModel.movieModel.subjects.length > 0) {
               _collectionSink.add(eventModel);
             }
           },

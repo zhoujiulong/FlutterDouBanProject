@@ -4,13 +4,13 @@ import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SoonPlayBloc extends BlocBase {
-  BehaviorSubject<MusicModel> _soonPlaySubject = BehaviorSubject<MusicModel>();
+  BehaviorSubject<MovieModel> _soonPlaySubject = BehaviorSubject<MovieModel>();
 
-  Sink<MusicModel> get _soonPlaySink => _soonPlaySubject.sink;
+  Sink<MovieModel> get _soonPlaySink => _soonPlaySubject.sink;
 
-  Stream<MusicModel> get soonPlayStream => _soonPlaySubject.stream;
+  Stream<MovieModel> get soonPlayStream => _soonPlaySubject.stream;
 
-  MusicModel musicModel;
+  MovieModel movieModel;
 
   void getSoonPlayData() {
     FormData params = FormData();
@@ -21,10 +21,10 @@ class SoonPlayBloc extends BlocBase {
   }
 
   _getHotPlayDataSuccess(BaseResponse response) {
-    musicModel = MusicModel.fromJson(response.result);
-    if (musicModel.subjects != null && musicModel.subjects.length > 0) {
+    movieModel = MovieModel.fromJson(response.result);
+    if (movieModel.subjects != null && movieModel.subjects.length > 0) {
       setLoadingState(LoadingState.success);
-      _soonPlaySink.add(musicModel);
+      _soonPlaySink.add(movieModel);
     } else {
       setLoadingState(LoadingState.empty);
     }

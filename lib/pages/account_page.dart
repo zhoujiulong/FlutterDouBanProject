@@ -19,7 +19,7 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _accountBloc = BlocProvider.of<AccountBloc>(context);
     _accountBloc.setScroll(0);
-    if (_accountBloc.eventModel.musicModel == null) {
+    if (_accountBloc.eventModel.movieModel == null) {
       Timer(Duration(milliseconds: 50), () {
         _accountBloc.getDataByType(context, COLLECTION_TYPE.WANT_LOOK);
       });
@@ -59,10 +59,10 @@ class AccountPage extends StatelessWidget {
           AsyncSnapshot<AccountListEventModel> snapshot) {
         AccountListEventModel model = snapshot.data;
         List<SubjectsModel> subjects = (model == null ||
-                model.musicModel == null ||
-                model.musicModel.subjects == null)
+                model.movieModel == null ||
+                model.movieModel.subjects == null)
             ? <SubjectsModel>[]
-            : model.musicModel.subjects;
+            : model.movieModel.subjects;
         COLLECTION_TYPE type = (model == null || model.collectionType == null)
             ? COLLECTION_TYPE.WANT_LOOK
             : model.collectionType;

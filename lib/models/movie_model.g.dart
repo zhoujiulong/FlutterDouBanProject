@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'music_model.dart';
+part of 'movie_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-MusicModel _$MusicModelFromJson(Map<String, dynamic> json) {
-  return MusicModel(
+MovieModel _$MovieModelFromJson(Map<String, dynamic> json) {
+  return MovieModel(
       count: json['count'] as int,
       start: json['start'] as int,
       total: json['total'] as int,
@@ -19,7 +19,7 @@ MusicModel _$MusicModelFromJson(Map<String, dynamic> json) {
       title: json['title'] as String);
 }
 
-Map<String, dynamic> _$MusicModelToJson(MusicModel instance) =>
+Map<String, dynamic> _$MovieModelToJson(MovieModel instance) =>
     <String, dynamic>{
       'count': instance.count,
       'start': instance.start,

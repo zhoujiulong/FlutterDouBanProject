@@ -1,20 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'music_model.g.dart';
+part 'movie_model.g.dart';
 
 @JsonSerializable()
-class MusicModel {
+class MovieModel {
   int count;
   int start;
   int total;
   List<SubjectsModel> subjects;
   String title;
 
-  MusicModel({this.count, this.start, this.total, this.subjects, this.title});
+  MovieModel({this.count, this.start, this.total, this.subjects, this.title});
 
-  factory MusicModel.fromJson(Map<String, dynamic> json) => _$MusicModelFromJson(json);
+  factory MovieModel.fromJson(Map<String, dynamic> json) => _$MovieModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MusicModelToJson(this);
+  Map<String, dynamic> toJson() => _$MovieModelToJson(this);
 }
 
 @JsonSerializable()
