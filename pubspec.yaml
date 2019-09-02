@@ -69,6 +69,11 @@ flutter:
     - assets/images/ic_setting.png
     - assets/images/ic_ticket.png
     - assets/images/ic_screen.png
+    - assets/images/ic_movie_sheet.png
+    - assets/images/ic_guess.png
+    - assets/images/ic_movie_list.png
+    - assets/images/ic_find_movie.png
+    - assets/images/ic_play_time.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
