@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,8 +27,7 @@ class AccountPage extends StatelessWidget {
 
     Function _setScroll = () {
       RenderBox renderBox = _globalKey.currentContext.findRenderObject();
-      Offset offset =
-          renderBox.localToGlobal(Offset(0.0, renderBox.size.height));
+      Offset offset = renderBox.localToGlobal(Offset(0.0, renderBox.size.height));
       if (locationY < 0) locationY = offset.dy;
       _accountBloc.setScroll(locationY - offset.dy);
     };
@@ -55,22 +53,17 @@ class AccountPage extends StatelessWidget {
     widgets.add(StreamBuilder(
       initialData: _accountBloc.eventModel,
       stream: _accountBloc.collectionStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<AccountListEventModel> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<AccountListEventModel> snapshot) {
         AccountListEventModel model = snapshot.data;
-        List<SubjectsModel> subjects = (model == null ||
-                model.movieModel == null ||
-                model.movieModel.subjects == null)
+        List<SubjectsModel> subjects = (model == null || model.movieModel == null || model.movieModel.subjects == null)
             ? <SubjectsModel>[]
             : model.movieModel.subjects;
-        COLLECTION_TYPE type = (model == null || model.collectionType == null)
-            ? COLLECTION_TYPE.WANT_LOOK
-            : model.collectionType;
+        COLLECTION_TYPE type =
+            (model == null || model.collectionType == null) ? COLLECTION_TYPE.WANT_LOOK : model.collectionType;
 
         return SliverStickyHeaderBuilder(
-          builder: (context, state) =>
-              _buildStickyBar(context, type, subjects.length),
-          sliver: _ButtomList(subjects),
+          builder: (context, state) => _buildStickyBar(context, type, subjects.length),
+          sliver: _buildList(subjects),
         );
       },
     ));
@@ -84,8 +77,7 @@ class AccountPage extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             return AppBarContainer(
               child: null,
-              backgroundColor:
-                  snapshot.data ? Colors.white : ColorRes.ACCOUNT_PAGE_TOP_BG,
+              backgroundColor: snapshot.data ? Colors.white : ColorRes.ACCOUNT_PAGE_TOP_BG,
             );
           },
         ),
@@ -108,8 +100,7 @@ class AccountPage extends StatelessWidget {
               child: StreamBuilder(
                 initialData: LoadingState.success,
                 stream: _accountBloc.loadingStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<LoadingState> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<LoadingState> snapshot) {
                   if (snapshot.data == LoadingState.success) {
                     _refreshController.refreshCompleted();
                   } else {
@@ -146,9 +137,7 @@ class AccountPage extends StatelessWidget {
                       "long",
                       style: TextStyle(
                         fontSize: Density.instance.sp(32),
-                        color: snapshot.data
-                            ? Color.fromARGB(255, 51, 51, 51)
-                            : Colors.transparent,
+                        color: snapshot.data ? Color.fromARGB(255, 51, 51, 51) : Colors.transparent,
                       ),
                     ),
                   ),
@@ -186,8 +175,7 @@ class AccountPage extends StatelessWidget {
           width: Density.instance.dp(160),
           height: Density.instance.dp(160),
           decoration: BoxDecoration(
-            border:
-                Border.all(color: Colors.white, width: Density.instance.dp(4)),
+            border: Border.all(color: Colors.white, width: Density.instance.dp(4)),
             borderRadius: BorderRadius.circular(Density.instance.dp(80)),
           ),
           child: ClipRRect(
@@ -224,10 +212,8 @@ class AccountPage extends StatelessWidget {
               width: Density.instance.dp(260),
               height: Density.instance.dp(70),
               decoration: BoxDecoration(
-                border: Border.all(
-                    width: Density.instance.dp(2), color: Colors.white),
-                borderRadius:
-                    BorderRadius.all(Radius.circular(Density.instance.dp(8))),
+                border: Border.all(width: Density.instance.dp(2), color: Colors.white),
+                borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(8))),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -243,8 +229,7 @@ class AccountPage extends StatelessWidget {
                   SizedBox(width: Density.instance.dp(20)),
                   Text(
                     "我的电影票",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: Density.instance.sp(26)),
+                    style: TextStyle(color: Colors.white, fontSize: Density.instance.sp(26)),
                   )
                 ],
               ),
@@ -267,8 +252,7 @@ class AccountPage extends StatelessWidget {
   }
 
   //构建吸顶部分
-  Widget _buildStickyBar(
-      BuildContext context, COLLECTION_TYPE choiceType, int size) {
+  Widget _buildStickyBar(BuildContext context, COLLECTION_TYPE choiceType, int size) {
     List<Widget> widgets = <Widget>[];
 
     //左侧描述文案
@@ -294,12 +278,9 @@ class AccountPage extends StatelessWidget {
 
     //中间类型
     List<Widget> typeWidgets = <Widget>[];
-    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.WANT_LOOK,
-        choiceType == COLLECTION_TYPE.WANT_LOOK));
-    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.LOOKING,
-        choiceType == COLLECTION_TYPE.LOOKING));
-    typeWidgets.add(_buildTypeButton(
-        context, COLLECTION_TYPE.SEEN, choiceType == COLLECTION_TYPE.SEEN));
+    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.WANT_LOOK, choiceType == COLLECTION_TYPE.WANT_LOOK));
+    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.LOOKING, choiceType == COLLECTION_TYPE.LOOKING));
+    typeWidgets.add(_buildTypeButton(context, COLLECTION_TYPE.SEEN, choiceType == COLLECTION_TYPE.SEEN));
     widgets.add(Padding(
       padding: EdgeInsets.only(right: Density.instance.dp(20)),
       child: ClipRRect(
@@ -369,8 +350,7 @@ class AccountPage extends StatelessWidget {
   }
 
   //创建类型按钮
-  Widget _buildTypeButton(
-      BuildContext context, COLLECTION_TYPE type, bool checked) {
+  Widget _buildTypeButton(BuildContext context, COLLECTION_TYPE type, bool checked) {
     _choiceCollectionType() {
       _accountBloc.setCollection(type);
       _accountBloc.getDataByType(context, type);
@@ -382,10 +362,8 @@ class AccountPage extends StatelessWidget {
         width: Density.instance.dp(90),
         height: Density.instance.dp(60),
         decoration: BoxDecoration(
-          border:
-              Border.all(width: Density.instance.dp(2), color: ColorRes.LINE),
-          borderRadius:
-              BorderRadius.all(Radius.circular(Density.instance.dp(30))),
+          border: Border.all(width: Density.instance.dp(2), color: ColorRes.LINE),
+          borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(30))),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Density.instance.dp(30)),
@@ -394,9 +372,7 @@ class AccountPage extends StatelessWidget {
             child: Center(
               child: Text(
                 _accountBloc.getTypeDesc(type),
-                style: TextStyle(
-                    color: ColorRes.TEXT_NORMAL,
-                    fontSize: Density.instance.sp(26)),
+                style: TextStyle(color: ColorRes.TEXT_NORMAL, fontSize: Density.instance.sp(26)),
               ),
             ),
           ),
@@ -409,8 +385,7 @@ class AccountPage extends StatelessWidget {
         child: Center(
           child: Text(
             _accountBloc.getTypeDesc(type),
-            style: TextStyle(
-                color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
+            style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
           ),
         ),
       );
@@ -420,18 +395,6 @@ class AccountPage extends StatelessWidget {
       child: child,
     );
   }
-}
-
-///底部列表
-class _ButtomList extends StatelessWidget {
-  List<SubjectsModel> subjects;
-
-  _ButtomList(this.subjects);
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildList(subjects);
-  }
 
   //构建底部列表
   Widget _buildList(List<SubjectsModel> subjects) {
@@ -440,181 +403,10 @@ class _ButtomList extends StatelessWidget {
         (context, index) {
           return Container(
             color: Colors.white,
-            child: index < subjects.length
-                ? _buildItem(subjects[index])
-                : _buildFooter(),
+            child: index < subjects.length ? MovieCommonListItem(subjects[index]) : NoMoreWidget(),
           );
         },
         childCount: subjects.length > 0 ? subjects.length + 1 : 0,
-      ),
-    );
-  }
-
-  //创建 item
-  Widget _buildItem(SubjectsModel data) {
-    if (data == null) data = SubjectsModel();
-    String title = data.title != null ? data.title : "未知标题";
-    String imgSrc = data.images == null ? "" : data.images.small ?? "";
-
-    StringBuffer msg = StringBuffer();
-    msg.write(data.year != null ? "${data.year} / " : "");
-    if (data.pubdates != null) {
-      data.pubdates.forEach((value) {
-        msg.write("$value ");
-      });
-      msg.write("/ ");
-    }
-    if (data.genres != null) {
-      data.genres.forEach((value) {
-        msg.write("$value ");
-      });
-      msg.write("/ ");
-    }
-    if (data.directors != null) {
-      data.directors.forEach((value) {
-        if (value.name != null) {
-          msg.write("${value.name} /");
-        }
-      });
-    }
-    String msgStr = msg.toString();
-    if (msgStr.endsWith("/")) {
-      msgStr = msgStr.substring(0, msgStr.length - 1);
-    }
-
-    return _buildItemWidget(data, title, imgSrc, msgStr);
-  }
-
-  //构建 item 控件
-  Widget _buildItemWidget(
-      SubjectsModel data, String title, String imgSrc, String msgStr) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-              left: Density.instance.dp(25),
-              right: Density.instance.dp(25),
-              top: Density.instance.dp(30),
-              bottom: Density.instance.dp(30)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildItemLeftImg(imgSrc),
-              Expanded(child: _buildItemCenterMsg(data, title, msgStr)),
-            ],
-          ),
-        ),
-        Container(
-          color: ColorRes.LINE,
-          height: Density.instance.dp(1),
-        )
-      ],
-    );
-  }
-
-  //绘制 item 左边图片
-  Widget _buildItemLeftImg(String imgSrc) {
-    return Container(
-      width: Density.instance.dp(160),
-      height: Density.instance.dp(230),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(Density.instance.dp(8)),
-        child: CachedNetworkImage(
-          imageUrl: imgSrc,
-          placeholder: (context, url) => ImgPlaceHolder(),
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
-  }
-
-  //构建 item 中间信息
-  Widget _buildItemCenterMsg(SubjectsModel data, String title, String msgStr) {
-    return Padding(
-      padding: EdgeInsets.only(
-          left: Density.instance.dp(26), right: Density.instance.dp(10)),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: ColorRes.TEXT_HAVY,
-                  fontSize: Density.instance.sp(32),
-                  fontWeight: FontWeight.bold),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: Density.instance.dp(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  StaticRatingBar(
-                    rate: data.rating.average / 2,
-                    size: Density.instance.dp(24),
-                    colorDark: ColorRes.TEXT_GRAY,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: Density.instance.dp(10)),
-                    child: Text(
-                      "${data.rating.average}",
-                      style: TextStyle(
-                          color: ColorRes.TEXT_GRAY,
-                          fontSize: Density.instance.sp(26)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: Density.instance.dp(20)),
-              child: Text(
-                msgStr,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: ColorRes.TEXT_GRAY,
-                    fontSize: Density.instance.sp(22)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  //底部没有更多了
-  Widget _buildFooter() {
-    return Container(
-      height: Density.instance.dp(60),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            color: ColorRes.LINE,
-            height: Density.instance.dp(1),
-            width: Density.instance.dp(30),
-          ),
-          Padding(
-              padding: EdgeInsets.only(
-                  left: Density.instance.dp(15),
-                  right: Density.instance.dp(15)),
-              child: Text(
-                "THE END",
-                style: TextStyle(
-                    color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
-              )),
-          Container(
-            color: ColorRes.LINE,
-            height: Density.instance.dp(1),
-            width: Density.instance.dp(30),
-          ),
-        ],
       ),
     );
   }
@@ -638,15 +430,12 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => max(maxHeight, minHeight);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new SizedBox.expand(child: child);
   }
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
+    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
   }
 }

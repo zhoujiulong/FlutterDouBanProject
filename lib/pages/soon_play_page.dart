@@ -82,7 +82,7 @@ class SoonPlayPage extends StatelessWidget {
     Iterable<String> keys = yearItem.keys;
     for (int i = 0; i < keys.length; i++) {
       String key = keys.elementAt(i);
-      widgets.add(_buildSliverSticky(key, yearItem[key], i == keys.length-1));
+      widgets.add(_buildSliverSticky(key, yearItem[key], i == keys.length - 1));
     }
 
     return CustomScrollView(
@@ -96,7 +96,7 @@ class SoonPlayPage extends StatelessWidget {
       builder: (context, state) => _buildItemTopYear(year),
       sliver: new SliverList(
         delegate: new SliverChildBuilderDelegate(
-          (context, i) => isLast && i == items.length ? _buildFooter() : _buildItem(items, i),
+          (context, i) => isLast && i == items.length ? NoMoreWidget() : _buildItem(items, i),
           childCount: isLast ? items.length + 1 : items.length,
         ),
       ),
@@ -266,34 +266,6 @@ class SoonPlayPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  //底部没有更多了
-  Widget _buildFooter() {
-    return Container(
-      height: Density.instance.dp(60),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            color: ColorRes.LINE,
-            height: Density.instance.dp(1),
-            width: Density.instance.dp(30),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: Density.instance.dp(15), right: Density.instance.dp(15)),
-              child: Text(
-                "THE END",
-                style: TextStyle(color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
-              )),
-          Container(
-            color: ColorRes.LINE,
-            height: Density.instance.dp(1),
-            width: Density.instance.dp(30),
-          ),
-        ],
       ),
     );
   }

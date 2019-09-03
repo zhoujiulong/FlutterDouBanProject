@@ -4,25 +4,95 @@ import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FindMovieBloc extends BlocBase {
+  BehaviorSubject<MovieModel> _weekMovieListSubject = BehaviorSubject<MovieModel>();
+
+  Sink<MovieModel> get _weeklyMovieListSink => _weekMovieListSubject.sink;
+
+  Stream<MovieModel> get weekMovieListStream => _weekMovieListSubject.stream;
+
+  BehaviorSubject<MovieModel> _usBoxMovieListSubject = BehaviorSubject<MovieModel>();
+
+  Sink<MovieModel> get _usBoxMovieListSink => _usBoxMovieListSubject.sink;
+
+  Stream<MovieModel> get usBoxMovieListStream => _usBoxMovieListSubject.stream;
+
   BehaviorSubject<MovieModel> _newMovieListSubject = BehaviorSubject<MovieModel>();
 
   Sink<MovieModel> get _newMovieListSink => _newMovieListSubject.sink;
 
   Stream<MovieModel> get newMovieListStream => _newMovieListSubject.stream;
 
-  MovieModel movieModel;
+  MovieModel weeklyListModel;
+  MovieModel newMovieListModel;
+  MovieModel usBoxListModel;
 
-  void getNewMovieListMovies() {
+  void getData() {
     FormData params = FormData();
     params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
     HttpUtil.instance.get(
       UrlConstant.NEW_MOVIE_LIST,
       listener: RequestListener(
         success: (BaseResponse response) {
-          movieModel = MovieModel.fromJson(response.result);
-          _newMovieListSink.add(movieModel);
+          weeklyListModel = MovieModel.fromJson(response.result);
+          if (weeklyListModel != null && weeklyListModel.subjects != null) {
+            int length = weeklyListModel.subjects.length;
+            if (length > 6) weeklyListModel.subjects = weeklyListModel.subjects.sublist(length - 6, length);
+            _getUsBoxListMovies();
+          } else {
+            setLoadingState(LoadingState.empty);
+          }
         },
         error: (BaseResponse response) {
+          setLoadingState(LoadingState.error);
+          Fluttertoast.showToast(msg: response.message);
+        },
+      ),
+    );
+  }
+
+  void _getUsBoxListMovies() {
+    FormData params = FormData();
+    params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
+    HttpUtil.instance.get(
+      UrlConstant.NEW_MOVIE_LIST,
+      listener: RequestListener(
+        success: (BaseResponse response) {
+          usBoxListModel = MovieModel.fromJson(response.result);
+          if (usBoxListModel != null && usBoxListModel.subjects != null) {
+            int length = usBoxListModel.subjects.length;
+            if (length > 3) usBoxListModel.subjects = usBoxListModel.subjects.sublist(length - 3, length);
+            _getNewMovieListMovies();
+          } else {
+            setLoadingState(LoadingState.empty);
+          }
+        },
+        error: (BaseResponse response) {
+          setLoadingState(LoadingState.error);
+          Fluttertoast.showToast(msg: response.message);
+        },
+      ),
+    );
+  }
+
+  void _getNewMovieListMovies() {
+    FormData params = FormData();
+    params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
+    HttpUtil.instance.get(
+      UrlConstant.NEW_MOVIE_LIST,
+      listener: RequestListener(
+        success: (BaseResponse response) {
+          newMovieListModel = MovieModel.fromJson(response.result);
+          if (newMovieListModel != null && newMovieListModel.subjects != null) {
+            setLoadingState(LoadingState.success);
+            _weeklyMovieListSink.add(weeklyListModel);
+            _usBoxMovieListSink.add(usBoxListModel);
+            _newMovieListSink.add(newMovieListModel);
+          } else {
+            setLoadingState(LoadingState.empty);
+          }
+        },
+        error: (BaseResponse response) {
+          setLoadingState(LoadingState.error);
           Fluttertoast.showToast(msg: response.message);
         },
       ),
@@ -35,5 +105,3 @@ class FindMovieBloc extends BlocBase {
   @override
   void dispose() {}
 }
-
-
