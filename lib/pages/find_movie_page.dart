@@ -171,6 +171,7 @@ class FindMoviePage extends StatelessWidget {
                   Stack(
                     children: <Widget>[
                       _buildItemImg(imgSrc),
+                      _buildLikeIcon(),
                     ],
                   ),
                   Padding(
@@ -225,6 +226,29 @@ class FindMoviePage extends StatelessWidget {
           imageUrl: imgSrc,
           placeholder: (context, url) => ImgPlaceHolder(),
           fit: BoxFit.fill,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLikeIcon() {
+    return Positioned(
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Density.instance.dp(8)),
+          bottomRight: Radius.circular(Density.instance.dp(8)),
+        ),
+        child: Container(
+          width: Density.instance.dp(50),
+          height: Density.instance.dp(50),
+          color: ColorRes.TEXT_NORMAL_TRANS,
+          child: Center(
+            child: Container(
+              width: Density.instance.dp(40),
+              height: Density.instance.dp(40),
+              child: Image.asset(ImageUtil.getImagePath("ic_like"), fit: BoxFit.fill),
+            ),
+          ),
         ),
       ),
     );

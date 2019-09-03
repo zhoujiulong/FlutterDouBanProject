@@ -75,6 +75,7 @@ flutter:
     - assets/images/ic_find_movie.png
     - assets/images/ic_play_time.png
     - assets/images/ic_seach.png
+    - assets/images/ic_like.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
