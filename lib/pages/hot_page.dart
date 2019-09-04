@@ -22,7 +22,7 @@ class HotPage extends StatefulWidget {
   }
 }
 
-class _HotPageState extends State<HotPage> with SingleTickerProviderStateMixin {
+class _HotPageState extends State<HotPage> with TickerProviderStateMixin {
   TabController _tabController;
   PageController _pageController;
 

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/index.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 ///搜索控件
 class SearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Fluttertoast.showToast(msg: "搜索页面正在开发中");
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+          return SearchPage();
+        }));
       },
       child: SizedBox.expand(
         child: ClipRRect(

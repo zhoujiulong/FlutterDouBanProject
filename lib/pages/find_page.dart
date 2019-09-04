@@ -20,7 +20,7 @@ class FindPage extends StatefulWidget {
   }
 }
 
-class _FindPageState extends State<FindPage> with SingleTickerProviderStateMixin {
+class _FindPageState extends State<FindPage> with TickerProviderStateMixin {
   TabController _tabController;
   PageController _pageController;
 
