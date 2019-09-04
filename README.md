@@ -16,6 +16,9 @@
     加载弹窗：自定义LoadingDialog
     标题栏：自定义 MyAppBar
     主页底部Tab切换：自定义 BottomTabBar
+ ### 安卓apk文件下载地址,IOS没有账号只能运行代码了
+        [跳转到页面后找到 Download 按钮点击进行下载](https://github.com/zhoujiulong/FlutterSample/blob/master/img/app-release.apk)
+  
     
     
     
