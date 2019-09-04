@@ -1,16 +1,10 @@
-# movie_sample
+仿豆瓣电影 Flutter 项目
+-------------
+### 项目简介
+    比较完整的项目，基于豆瓣电影开放的api接口进行开发，巩固和学习flutter技术
+### 先上效果图
+    左变是 ios 运行图，右侧是 android 运行图，gif图片有点大如长时间未显示请刷新尝试
+<img src="https://github.com/zhoujiulong/FlutterSample/blob/master/img/ios_record2.gif" width="30%"/><img src="https://github.com/zhoujiulong/FlutterSample/blob/master/img/android_record.gif" width="38%"/>
 
-豆瓣电影flutter模仿
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
