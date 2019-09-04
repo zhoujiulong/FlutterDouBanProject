@@ -147,12 +147,17 @@ class AccountPage extends StatelessWidget {
             Positioned(
               top: Density.instance.dp(19),
               right: Density.instance.dp(30),
-              child: Container(
-                width: Density.instance.dp(50),
-                height: Density.instance.dp(50),
-                child: Image.asset(
-                  ImageUtil.getImagePath("ic_setting"),
-                  fit: BoxFit.fill,
+              child: GestureDetector(
+                onTap: () {
+                  Fluttertoast.showToast(msg: "设置");
+                },
+                child: Container(
+                  width: Density.instance.dp(50),
+                  height: Density.instance.dp(50),
+                  child: Image.asset(
+                    ImageUtil.getImagePath("ic_setting"),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
@@ -208,30 +213,35 @@ class AccountPage extends StatelessWidget {
           //我的电影票按钮
           Padding(
             padding: EdgeInsets.only(top: Density.instance.dp(40)),
-            child: Container(
-              width: Density.instance.dp(260),
-              height: Density.instance.dp(70),
-              decoration: BoxDecoration(
-                border: Border.all(width: Density.instance.dp(2), color: Colors.white),
-                borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(8))),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    width: Density.instance.dp(34),
-                    height: Density.instance.dp(28),
-                    child: Image.asset(
-                      ImageUtil.getImagePath("ic_ticket"),
-                      fit: BoxFit.fill,
+            child: GestureDetector(
+              onTap: () {
+                Fluttertoast.showToast(msg: "我的电影票");
+              },
+              child: Container(
+                width: Density.instance.dp(260),
+                height: Density.instance.dp(70),
+                decoration: BoxDecoration(
+                  border: Border.all(width: Density.instance.dp(2), color: Colors.white),
+                  borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(8))),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      width: Density.instance.dp(34),
+                      height: Density.instance.dp(28),
+                      child: Image.asset(
+                        ImageUtil.getImagePath("ic_ticket"),
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: Density.instance.dp(20)),
-                  Text(
-                    "我的电影票",
-                    style: TextStyle(color: Colors.white, fontSize: Density.instance.sp(26)),
-                  )
-                ],
+                    SizedBox(width: Density.instance.dp(20)),
+                    Text(
+                      "我的电影票",
+                      style: TextStyle(color: Colors.white, fontSize: Density.instance.sp(26)),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
