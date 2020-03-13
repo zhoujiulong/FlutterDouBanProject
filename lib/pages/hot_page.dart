@@ -22,7 +22,7 @@ class HotPage extends StatefulWidget {
   }
 }
 
-class _HotPageState extends State<HotPage> with TickerProviderStateMixin {
+class _HotPageState extends State<HotPage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController _tabController;
   PageController _pageController;
 
@@ -85,4 +85,7 @@ class _HotPageState extends State<HotPage> with TickerProviderStateMixin {
           )),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -20,7 +20,7 @@ class FindPage extends StatefulWidget {
   }
 }
 
-class _FindPageState extends State<FindPage> with TickerProviderStateMixin {
+class _FindPageState extends State<FindPage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   TabController _tabController;
   PageController _pageController;
 
@@ -83,4 +83,7 @@ class _FindPageState extends State<FindPage> with TickerProviderStateMixin {
           )),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

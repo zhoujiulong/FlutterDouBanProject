@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/index.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MainPage();
+}
+
+class _MainPage extends State<MainPage> {
   //底部导航栏Items
   final List<BottomTabBarItem> tabBarItems = [
     BottomTabBarItem(
@@ -19,35 +24,39 @@ class MainPage extends StatelessWidget {
     BlocProvider(bloc: AccountBloc(), child: AccountPage()),
   ];
 
+  int _currentIndex = 0;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    this._pageController = PageController(initialPage: this._currentIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
-    ApplicationBloc applicationBloc = BlocProvider.of<ApplicationBloc>(context);
-
-    return StreamBuilder(
-      stream: applicationBloc.mainIndexStream,
-      initialData: 0,
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        int index = (snapshot.data >= 0 && snapshot.data < widgetOptions.length) ? snapshot.data : 0;
-        return Scaffold(
-          bottomNavigationBar: BottomTabBar(
-            items: tabBarItems,
-            selectedColor: ColorRes.TEXT_NORMAL,
-            unSelectedColor: ColorRes.TEXT_GRAY,
-            currentIndex: index,
-            onTap: (int i) {
-              applicationBloc.sendMainIndexEvent(i);
-            },
-            iconSize: Density.instance.dp(42),
-            fontSize: Density.instance.dp(20),
-            iconTopMargin: Density.instance.dp(20),
-            iconBottomMargin: Density.instance.dp(5),
-            fontBottomMargin: Density.instance.dp(12),
-          ),
-          body: SizedBox.expand(
-            child: widgetOptions.elementAt(index),
-          ),
-        );
-      },
+    return Scaffold(
+      bottomNavigationBar: BottomTabBar(
+        items: tabBarItems,
+        selectedColor: ColorRes.TEXT_NORMAL,
+        unSelectedColor: ColorRes.TEXT_GRAY,
+        currentIndex: _currentIndex,
+        onTap: (int i) {
+          setState(() {
+            this._currentIndex = i;
+            this._pageController.jumpToPage(this._currentIndex);
+          });
+        },
+        iconSize: Density.instance.dp(42),
+        fontSize: Density.instance.dp(20),
+        iconTopMargin: Density.instance.dp(20),
+        iconBottomMargin: Density.instance.dp(5),
+        fontBottomMargin: Density.instance.dp(12),
+      ),
+      body: PageView(
+        controller: _pageController,
+        children: widgetOptions,
+      ),
     );
   }
 }
