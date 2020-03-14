@@ -37,7 +37,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.movie_sample"
         minSdkVersion 16
         targetSdkVersion 28
@@ -46,11 +45,29 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
+    signingConfigs {
+        debug {
+            storePassword 'sz123456'
+            keyAlias 'sz123456'
+            keyPassword 'sz123456'
+            storeFile file('sz123456.jks')
+            v2SigningEnabled true
+        }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            storePassword 'sz12345678'
+            keyAlias 'sz12345678'
+            keyPassword 'sz12345678'
+            storeFile file('sz12345678.jks')
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        debug {
             signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
