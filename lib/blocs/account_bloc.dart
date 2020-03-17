@@ -46,10 +46,10 @@ class AccountBloc extends BlocBase {
     } else if (type == COLLECTION_TYPE.SEEN) {
       start += 7;
     }
-    FormData params = FormData();
-    params.add("start", "$start");
-    params.add("count", "8");
-    params.add("city", "深圳");
+    Map<String, dynamic> params = Map();
+    params["start"] = "$start";
+    params["count"] = "8";
+    params["city"] = "深圳";
     if (!isRefresh) {
       showDialog(
           context: context,

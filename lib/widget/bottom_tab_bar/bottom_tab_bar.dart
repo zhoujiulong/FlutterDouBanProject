@@ -8,9 +8,9 @@ import 'bottom_tab_bar_item.dart';
 class BottomTabBar extends StatefulWidget {
   BottomTabBar(
       {Key key,
-      @required this.items,
-      @required this.selectedColor,
-      @required this.unSelectedColor,
+      this.items,
+      this.selectedColor,
+      this.unSelectedColor,
       this.backgroundColor = Colors.transparent,
       this.onTap,
       this.currentIndex = 0,
@@ -60,7 +60,8 @@ class BottomTabBar extends StatefulWidget {
   _BottomTabBarState createState() => _BottomTabBarState();
 }
 
-class _BottomTabBarState extends State<BottomTabBar> with TickerProviderStateMixin {
+class _BottomTabBarState extends State<BottomTabBar>
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
@@ -88,7 +89,8 @@ class _BottomTabBarState extends State<BottomTabBar> with TickerProviderStateMix
 
   ///根据传进来的底部按钮数量进行创建
   List<Widget> _createTiles() {
-    final MaterialLocalizations localizations = MaterialLocalizations.of(context);
+    final MaterialLocalizations localizations =
+        MaterialLocalizations.of(context);
     assert(localizations != null);
     final List<Widget> children = <Widget>[];
     for (int i = 0; i < widget.items.length; i += 1) {
@@ -98,7 +100,9 @@ class _BottomTabBarState extends State<BottomTabBar> with TickerProviderStateMix
           widget.iconSize,
           widget.fontSize,
           i == widget.currentIndex,
-          i == widget.currentIndex ? widget.selectedColor : widget.unSelectedColor,
+          i == widget.currentIndex
+              ? widget.selectedColor
+              : widget.unSelectedColor,
           widget.iconTopMargin,
           widget.iconBottomMargin,
           widget.fontBottomMargin,

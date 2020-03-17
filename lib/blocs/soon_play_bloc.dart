@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,11 +12,13 @@ class SoonPlayBloc extends BlocBase {
   MovieModel movieModel;
 
   void getSoonPlayData() {
-    FormData params = FormData();
+    Map<String, dynamic> params = Map();
 //    params.add("start", "0");
 //    params.add("count", "1");
     HttpUtil.instance.get(UrlConstant.SOON_PLAY,
-        params: params, listener: RequestListener(success: _getHotPlayDataSuccess, error: _getHotPlayDataError));
+        params: params,
+        listener: RequestListener(
+            success: _getHotPlayDataSuccess, error: _getHotPlayDataError));
   }
 
   _getHotPlayDataSuccess(BaseResponse response) {

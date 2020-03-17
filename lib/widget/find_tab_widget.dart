@@ -20,7 +20,7 @@ class FindTabWidget extends StatelessWidget {
   final ValueChanged<FIND_TYPE> onTabClick;
   final bool isTv;
 
-  FindTabWidget({this.onTabClick, @required this.isTv});
+  FindTabWidget({this.onTabClick, this.isTv});
 
   @override
   Widget build(BuildContext context) {

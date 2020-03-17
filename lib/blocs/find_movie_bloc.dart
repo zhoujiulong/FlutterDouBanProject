@@ -27,7 +27,7 @@ class FindMovieBloc extends BlocBase {
   MovieModel usBoxListModel;
 
   void getData() {
-    FormData params = FormData();
+    Map<String, dynamic> params = Map();
     params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
     HttpUtil.instance.get(
       UrlConstant.NEW_MOVIE_LIST,
@@ -51,7 +51,7 @@ class FindMovieBloc extends BlocBase {
   }
 
   void _getUsBoxListMovies() {
-    FormData params = FormData();
+    Map<String, dynamic> params = Map();
     params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
     HttpUtil.instance.get(
       UrlConstant.NEW_MOVIE_LIST,
@@ -75,7 +75,7 @@ class FindMovieBloc extends BlocBase {
   }
 
   void _getNewMovieListMovies() {
-    FormData params = FormData();
+    Map<String, dynamic> params = Map();
     params["apikey"] = "0df993c66c0c636e29ecbb5344252a4a";
     HttpUtil.instance.get(
       UrlConstant.NEW_MOVIE_LIST,

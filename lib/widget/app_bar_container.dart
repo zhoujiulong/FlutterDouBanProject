@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ///使用传进来的控件作为标题
 class AppBarContainer extends StatelessWidget implements PreferredSizeWidget {
-  AppBarContainer({@required this.child, this.height = 0, this.backgroundColor = Colors.transparent});
+  AppBarContainer({this.child, this.height = 0, this.backgroundColor = Colors.transparent});
 
   final Widget child;
   final double height;

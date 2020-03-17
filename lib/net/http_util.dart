@@ -37,18 +37,18 @@ class HttpUtil {
 
   ///get请求
   ///如果 url 是以 http 开头的则忽略 baseUrl
-  get(String url, {@required listener, params}) async {
+  get(String url, {@required listener, Map<String, dynamic> params}) async {
     _requestHttp(url, listener, _GET, params);
   }
 
   ///post请求
   ///如果 url 是以 http 开头的则忽略 baseUrl
-  post(String url, {@required listener, params}) async {
+  post(String url, {@required listener, Map<String, dynamic> params}) async {
     _requestHttp(url, listener, _POST, params);
   }
 
   ///网络请求
-  _requestHttp(String url, RequestListener requestListener, [String method, FormData params]) async {
+  _requestHttp(String url, RequestListener requestListener, [String method, Map<String, dynamic> params]) async {
     if (requestListener == null) return;
     try {
       Response<Map<String, dynamic>> response;

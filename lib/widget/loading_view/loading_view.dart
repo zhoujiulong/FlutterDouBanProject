@@ -48,8 +48,7 @@ class LoadingView extends StatelessWidget {
   final Color bgColor;
 
   LoadingView(
-      {this.state = LoadingState.loading,
-      @required this.contentWidget,
+      {this.state = LoadingState.loading, this.contentWidget,
       this.customWidget,
       this.allRetryListener,
       this.emptyRetryListener,

@@ -16,7 +16,7 @@ class HotPlayBloc extends BlocBase {
   MovieModel hotPlayModel;
 
   void getHotPlayData() {
-    FormData params = FormData();
+    Map<String, dynamic> params = Map();
 //    params.add("start", "0");
 //    params.add("count", "1");
 //    params.add("city", "深圳");
