@@ -6,3 +6,4 @@ export 'package:movie_sample/blocs/account_bloc.dart';
 export 'package:movie_sample/blocs/find_movie_bloc.dart';
 export 'package:movie_sample/blocs/find_tv_bloc.dart';
 export 'package:movie_sample/blocs/search_bloc.dart';
+export 'package:movie_sample/blocs/movie_detail_bloc.dart';

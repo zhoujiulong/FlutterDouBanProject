@@ -8,3 +8,4 @@ export 'package:movie_sample/pages/soon_play_page.dart';
 export 'package:movie_sample/pages/find_movie_page.dart';
 export 'package:movie_sample/pages/find_tv_page.dart';
 export 'package:movie_sample/pages/search_page.dart';
+export 'package:movie_sample/pages/movie_detail_page.dart';

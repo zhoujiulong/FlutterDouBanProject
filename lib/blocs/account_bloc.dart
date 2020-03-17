@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_sample/index/index.dart';
@@ -15,8 +14,7 @@ class AccountBloc extends BlocBase {
   Stream<AccountListEventModel> get collectionStream =>
       _collectionSubject.stream;
 
-  BehaviorSubject<bool> _titleBgAlphaPercentSubject =
-      BehaviorSubject<bool>();
+  BehaviorSubject<bool> _titleBgAlphaPercentSubject = BehaviorSubject<bool>();
 
   Sink<bool> get _titleBgAlphaPercentSink => _titleBgAlphaPercentSubject.sink;
 
@@ -49,7 +47,6 @@ class AccountBloc extends BlocBase {
     Map<String, dynamic> params = Map();
     params["start"] = "$start";
     params["count"] = "8";
-    params["city"] = "深圳";
     if (!isRefresh) {
       showDialog(
           context: context,
@@ -104,5 +101,8 @@ class AccountBloc extends BlocBase {
   void disposeBase() {}
 
   @override
-  void dispose() {}
+  void dispose() {
+    _collectionSubject.close();
+    _titleBgAlphaPercentSubject.close();
+  }
 }

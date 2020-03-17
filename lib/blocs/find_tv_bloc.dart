@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_sample/index/index.dart';
 import 'package:rxdart/rxdart.dart';
@@ -106,6 +105,9 @@ class FindTvBloc extends BlocBase {
   
   @override
   void dispose() {
+    _weekMovieListSubject.close();
+    _usBoxMovieListSubject.close();
+    _newMovieListSubject.close();
   }
   
 }

@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_sample/index/index.dart';
+import 'package:movie_sample/pages/movie_detail_page.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 ///正在热播
 class HotPlayPage extends StatelessWidget {
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   HotPlayBloc _hotPlayBloc;
+  BuildContext _context;
 
   void _refresh() {
     _hotPlayBloc.getHotPlayData();
@@ -14,13 +17,16 @@ class HotPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     _hotPlayBloc = BlocProvider.of<HotPlayBloc>(context);
     if (_hotPlayBloc.hotPlayModel == null) {
       _hotPlayBloc.getHotPlayData();
     }
 
     return StreamBuilder(
-        initialData: _hotPlayBloc.hotPlayModel == null ? LoadingState.loading : LoadingState.success,
+        initialData: _hotPlayBloc.hotPlayModel == null
+            ? LoadingState.loading
+            : LoadingState.success,
         stream: _hotPlayBloc.loadingStream,
         builder: (BuildContext context, AsyncSnapshot<LoadingState> snapshot) {
           if (snapshot.data == LoadingState.success) {
@@ -33,7 +39,8 @@ class HotPlayPage extends StatelessWidget {
             contentWidget: StreamBuilder(
                 initialData: _hotPlayBloc.hotPlayModel,
                 stream: _hotPlayBloc.hotPlayDataStream,
-                builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
+                builder:
+                    (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
                   return ConstrainedBox(
                     constraints: BoxConstraints.expand(),
                     child: Container(
@@ -62,7 +69,9 @@ class HotPlayPage extends StatelessWidget {
       itemCount: subjects.length + 1,
       padding: EdgeInsets.all(0),
       itemBuilder: (context, index) {
-        return index < subjects.length ? _buildItem(subjects[index]) : NoMoreWidget();
+        return index < subjects.length
+            ? _buildItem(subjects[index])
+            : NoMoreWidget();
       },
     );
   }
@@ -103,7 +112,8 @@ class HotPlayPage extends StatelessWidget {
   }
 
   //构建 item 控件
-  Widget _buildItemWidget(SubjectsModel data, String title, String imgSrc, String msgStr) {
+  Widget _buildItemWidget(
+      SubjectsModel data, String title, String imgSrc, String msgStr) {
     return Column(
       children: <Widget>[
         Padding(
@@ -112,14 +122,21 @@ class HotPlayPage extends StatelessWidget {
               right: Density.instance.dp(25),
               top: Density.instance.dp(30),
               bottom: Density.instance.dp(30)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildItemLeftImg(imgSrc),
-              _buildItemCenterMsg(data, title, msgStr),
-              _buildItemRightMsg(),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context){
+                return MovieDetailPage(data);
+              }));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildItemLeftImg(imgSrc),
+                _buildItemCenterMsg(data, title, msgStr),
+                _buildItemRightMsg(),
+              ],
+            ),
           ),
         ),
         Container(
@@ -149,7 +166,8 @@ class HotPlayPage extends StatelessWidget {
   //构建 item 中间信息
   Widget _buildItemCenterMsg(SubjectsModel data, String title, String msgStr) {
     return Padding(
-      padding: EdgeInsets.only(left: Density.instance.dp(26), right: Density.instance.dp(10)),
+      padding: EdgeInsets.only(
+          left: Density.instance.dp(26), right: Density.instance.dp(10)),
       child: Container(
         width: Density.instance.dp(360),
         child: Column(
@@ -160,8 +178,10 @@ class HotPlayPage extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(32), fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: ColorRes.TEXT_HAVY,
+                  fontSize: Density.instance.sp(32),
+                  fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: EdgeInsets.only(top: Density.instance.dp(20)),
@@ -178,7 +198,9 @@ class HotPlayPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: Density.instance.dp(10)),
                     child: Text(
                       "${data.rating.average}",
-                      style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
+                      style: TextStyle(
+                          color: ColorRes.TEXT_GRAY,
+                          fontSize: Density.instance.sp(26)),
                     ),
                   ),
                 ],
@@ -190,7 +212,9 @@ class HotPlayPage extends StatelessWidget {
                 msgStr,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(22)),
+                style: TextStyle(
+                    color: ColorRes.TEXT_GRAY,
+                    fontSize: Density.instance.sp(22)),
               ),
             ),
           ],
@@ -214,12 +238,17 @@ class HotPlayPage extends StatelessWidget {
                   width: Density.instance.dp(100),
                   height: Density.instance.dp(50),
                   decoration: BoxDecoration(
-                      border: Border.all(width: Density.instance.dp(1), color: ColorRes.TEXT_RED),
-                      borderRadius: BorderRadius.all(Radius.circular(Density.instance.dp(5)))),
+                      border: Border.all(
+                          width: Density.instance.dp(1),
+                          color: ColorRes.TEXT_RED),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Density.instance.dp(5)))),
                   child: Center(
                     child: Text(
                       "购票",
-                      style: TextStyle(color: ColorRes.TEXT_RED, fontSize: Density.instance.sp(26)),
+                      style: TextStyle(
+                          color: ColorRes.TEXT_RED,
+                          fontSize: Density.instance.sp(26)),
                     ),
                   ),
                 ),
@@ -228,7 +257,8 @@ class HotPlayPage extends StatelessWidget {
                 padding: EdgeInsets.only(top: Density.instance.dp(10)),
                 child: Text(
                   "1.4万人看过",
-                  style: TextStyle(color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
+                  style: TextStyle(
+                      color: ColorRes.LINE, fontSize: Density.instance.dp(22)),
                 ),
               ),
             ],

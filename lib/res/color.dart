@@ -9,5 +9,6 @@ class ColorRes {
   static const Color YELLOW = Color.fromARGB(255, 255, 164, 0);
   static const Color WINDOW_BG = Color.fromARGB(255, 248, 248, 248);
   static const Color ACCOUNT_PAGE_TOP_BG = Color.fromARGB(255, 104, 155, 255);
+  static const Color ACCOUNT_PAGE_TOP_BG_GRAY = Color.fromARGB(88, 104, 155, 255);
   static const Color TEXT_NORMAL_TRANS = Color.fromARGB(120, 51, 51, 51);
 }

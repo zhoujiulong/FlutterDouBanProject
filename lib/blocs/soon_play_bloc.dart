@@ -40,5 +40,7 @@ class SoonPlayBloc extends BlocBase {
   void disposeBase() {}
 
   @override
-  void dispose() {}
+  void dispose() {
+    _soonPlaySubject.close();
+  }
 }

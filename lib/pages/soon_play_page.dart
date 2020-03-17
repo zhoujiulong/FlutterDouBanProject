@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class SoonPlayPage extends StatelessWidget {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   SoonPlayBloc _hotPlayBloc;
+  BuildContext _context;
 
   void _refresh() {
     _hotPlayBloc.getSoonPlayData();
@@ -15,6 +16,7 @@ class SoonPlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     _hotPlayBloc = BlocProvider.of<SoonPlayBloc>(context);
     if (_hotPlayBloc.movieModel == null) {
       _hotPlayBloc.getSoonPlayData();
@@ -149,14 +151,21 @@ class SoonPlayPage extends StatelessWidget {
           right: Density.instance.dp(25),
           top: Density.instance.dp(30),
           bottom: Density.instance.dp(30)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildItemImg(imgSrc),
-          _buildItemCenterMsg(title, msgStr),
-          _buildItemRightMsg(),
-        ],
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(_context, MaterialPageRoute(builder: (BuildContext context){
+            return MovieDetailPage(data);
+          }));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildItemImg(imgSrc),
+            _buildItemCenterMsg(title, msgStr),
+            _buildItemRightMsg(),
+          ],
+        ),
       ),
     ));
     childers.add(Container(

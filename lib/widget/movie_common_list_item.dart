@@ -4,11 +4,13 @@ import 'package:movie_sample/index/index.dart';
 
 class MovieCommonListItem extends StatelessWidget {
   final SubjectsModel data;
+  BuildContext _context;
 
   MovieCommonListItem(this.data);
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return _buildItem();
   }
 
@@ -47,7 +49,8 @@ class MovieCommonListItem extends StatelessWidget {
   }
 
   //构建 item 控件
-  Widget _buildItemWidget(SubjectsModel data, String title, String imgSrc, String msgStr) {
+  Widget _buildItemWidget(
+      SubjectsModel data, String title, String imgSrc, String msgStr) {
     return Column(
       children: <Widget>[
         Padding(
@@ -56,13 +59,21 @@ class MovieCommonListItem extends StatelessWidget {
               right: Density.instance.dp(25),
               top: Density.instance.dp(30),
               bottom: Density.instance.dp(30)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildItemLeftImg(imgSrc),
-              Expanded(child: _buildItemCenterMsg(data, title, msgStr)),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(_context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return MovieDetailPage(data);
+              }));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildItemLeftImg(imgSrc),
+                Expanded(child: _buildItemCenterMsg(data, title, msgStr)),
+              ],
+            ),
           ),
         ),
         Container(
@@ -92,7 +103,8 @@ class MovieCommonListItem extends StatelessWidget {
   //构建 item 中间信息
   Widget _buildItemCenterMsg(SubjectsModel data, String title, String msgStr) {
     return Padding(
-      padding: EdgeInsets.only(left: Density.instance.dp(26), right: Density.instance.dp(10)),
+      padding: EdgeInsets.only(
+          left: Density.instance.dp(26), right: Density.instance.dp(10)),
       child: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -102,8 +114,10 @@ class MovieCommonListItem extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(32), fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: ColorRes.TEXT_HAVY,
+                  fontSize: Density.instance.sp(32),
+                  fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: EdgeInsets.only(top: Density.instance.dp(20)),
@@ -120,7 +134,9 @@ class MovieCommonListItem extends StatelessWidget {
                     padding: EdgeInsets.only(left: Density.instance.dp(10)),
                     child: Text(
                       "${data.rating == null ? 0 : data.rating.average}",
-                      style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
+                      style: TextStyle(
+                          color: ColorRes.TEXT_GRAY,
+                          fontSize: Density.instance.sp(26)),
                     ),
                   ),
                 ],
@@ -132,7 +148,9 @@ class MovieCommonListItem extends StatelessWidget {
                 msgStr,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(22)),
+                style: TextStyle(
+                    color: ColorRes.TEXT_GRAY,
+                    fontSize: Density.instance.sp(22)),
               ),
             ),
           ],

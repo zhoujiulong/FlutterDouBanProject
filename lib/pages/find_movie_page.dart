@@ -10,9 +10,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class FindMoviePage extends StatelessWidget {
   FindMovieBloc _findMovieBloc;
   RefreshController _refreshController;
+  BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     _findMovieBloc = BlocProvider.of<FindMovieBloc>(context);
     _refreshController = RefreshController();
 
@@ -44,7 +46,9 @@ class FindMoviePage extends StatelessWidget {
     widgets.add(_buildList());
 
     return StreamBuilder(
-      initialData: _findMovieBloc.newMovieListModel == null ? LoadingState.loading : LoadingState.success,
+      initialData: _findMovieBloc.newMovieListModel == null
+          ? LoadingState.loading
+          : LoadingState.success,
       stream: _findMovieBloc.loadingStream,
       builder: (BuildContext context, AsyncSnapshot<LoadingState> snapshot) {
         if (snapshot.data == LoadingState.success) {
@@ -86,7 +90,10 @@ class FindMoviePage extends StatelessWidget {
         ),
         child: Text(
           subTitle,
-          style: TextStyle(color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(36), fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: ColorRes.TEXT_HAVY,
+              fontSize: Density.instance.sp(36),
+              fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -98,7 +105,10 @@ class FindMoviePage extends StatelessWidget {
         stream: _findMovieBloc.weekMovieListStream,
         builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
           MovieModel model = snapshot.data;
-          List<SubjectsModel> subjects = (model == null || model.subjects == null) ? <SubjectsModel>[] : model.subjects;
+          List<SubjectsModel> subjects =
+              (model == null || model.subjects == null)
+                  ? <SubjectsModel>[]
+                  : model.subjects;
           return _buildWeeklyListWidget(subjects);
         });
   }
@@ -109,7 +119,10 @@ class FindMoviePage extends StatelessWidget {
         stream: _findMovieBloc.usBoxMovieListStream,
         builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
           MovieModel model = snapshot.data;
-          List<SubjectsModel> subjects = (model == null || model.subjects == null) ? <SubjectsModel>[] : model.subjects;
+          List<SubjectsModel> subjects =
+              (model == null || model.subjects == null)
+                  ? <SubjectsModel>[]
+                  : model.subjects;
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -131,13 +144,18 @@ class FindMoviePage extends StatelessWidget {
         stream: _findMovieBloc.newMovieListStream,
         builder: (BuildContext context, AsyncSnapshot<MovieModel> snapshot) {
           MovieModel model = snapshot.data;
-          List<SubjectsModel> subjects = (model == null || model.subjects == null) ? <SubjectsModel>[] : model.subjects;
+          List<SubjectsModel> subjects =
+              (model == null || model.subjects == null)
+                  ? <SubjectsModel>[]
+                  : model.subjects;
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return Container(
                   color: Colors.white,
-                  child: index < subjects.length ? MovieCommonListItem(subjects[index]) : NoMoreWidget(),
+                  child: index < subjects.length
+                      ? MovieCommonListItem(subjects[index])
+                      : NoMoreWidget(),
                 );
               },
               childCount: subjects.length > 0 ? subjects.length + 1 : 0,
@@ -148,7 +166,8 @@ class FindMoviePage extends StatelessWidget {
 
   Widget _buildWeeklyListWidget(List<SubjectsModel> subjects) {
     return SliverPadding(
-      padding: EdgeInsets.only(left: Density.instance.dp(30), right: Density.instance.dp(30)),
+      padding: EdgeInsets.only(
+          left: Density.instance.dp(30), right: Density.instance.dp(30)),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -164,47 +183,62 @@ class FindMoviePage extends StatelessWidget {
             return Container(
               width: double.infinity,
               padding: EdgeInsets.only(top: Density.instance.dp(30)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      _buildItemImg(imgSrc),
-                      _buildLikeIcon(),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: Density.instance.dp(15)),
-                    child: Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: ColorRes.TEXT_HAVY, fontSize: Density.instance.sp(32)),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: Density.instance.dp(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(_context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return MovieDetailPage(data);
+                  }));
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Stack(
                       children: <Widget>[
-                        StaticRatingBar(
-                          rate: data.rating == null ? 0 : data.rating.average / 2,
-                          size: Density.instance.dp(24),
-                          colorDark: ColorRes.TEXT_GRAY,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: Density.instance.dp(10)),
-                          child: Text(
-                            "${data.rating == null ? 0 : data.rating.average}",
-                            style: TextStyle(color: ColorRes.TEXT_GRAY, fontSize: Density.instance.sp(26)),
-                          ),
-                        ),
+                        _buildItemImg(imgSrc),
+                        _buildLikeIcon(),
                       ],
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.only(top: Density.instance.dp(15)),
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: ColorRes.TEXT_HAVY,
+                            fontSize: Density.instance.sp(32)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: Density.instance.dp(10)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          StaticRatingBar(
+                            rate: data.rating == null
+                                ? 0
+                                : data.rating.average / 2,
+                            size: Density.instance.dp(24),
+                            colorDark: ColorRes.TEXT_GRAY,
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: Density.instance.dp(10)),
+                            child: Text(
+                              "${data.rating == null ? 0 : data.rating.average}",
+                              style: TextStyle(
+                                  color: ColorRes.TEXT_GRAY,
+                                  fontSize: Density.instance.sp(26)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -246,7 +280,8 @@ class FindMoviePage extends StatelessWidget {
             child: Container(
               width: Density.instance.dp(40),
               height: Density.instance.dp(40),
-              child: Image.asset(ImageUtil.getImagePath("ic_like"), fit: BoxFit.fill),
+              child: Image.asset(ImageUtil.getImagePath("ic_like"),
+                  fit: BoxFit.fill),
             ),
           ),
         ),

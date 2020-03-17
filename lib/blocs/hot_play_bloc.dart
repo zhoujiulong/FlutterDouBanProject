@@ -45,6 +45,6 @@ class HotPlayBloc extends BlocBase {
 
   @override
   void dispose() {
-    //因为是一级页面，页面切换也会调用该方法，所以不进行关闭
+    _hotPlayDataSubject.close();
   }
 }
